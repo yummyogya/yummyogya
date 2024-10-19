@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ nama_web }}</title>
+        <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    
+<h1>Daftar Makanan Khas Jogja</h1>
+
+<!-- Cek apakah ada makanan yang ditemukan -->
+{% if makanan %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Deskripsi</th>
+                <th>Kategori</th>
+                <th>Restoran</th>
+                <th>Harga</th>
+                <th>Rating</th>
+                <th>Gambar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterasi setiap makanan yang dikirim dari views.py -->
+            {% for item in makanan %}
+            <tr>
+                <td>{{ item.nama }}</td>
+                <td>{{ item.deskripsi }}</td>
+                <td>{{ item.kategori }}</td>
+                <td>{{ item.restoran }}</td>
+                <td>{{ item.harga }}</td>
+                <td>{{ item.rating }}</td>
+                <td>
+                    <!-- Tampilkan gambar jika ada -->
+                    {% if item.gambar %}
+                        <img src="{{ item.gambar }}" alt="{{ item.nama }}" width="100">
+                    {% else %}
+                        Tidak ada gambar
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Tidak ada data makanan yang ditemukan.</p>
+{% endif %}
+
+</body>
+</html>
+
+{% endblock content %}
