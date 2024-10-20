@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ nama_web }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #4CAF50;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .hero-section h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .hero-section p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-bar button {
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Styling the cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .card-body h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .card-body p {
+            color: #666;
+        }
+
+        .card-body .price {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .pagination a:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Selamat Datang di Yummyogya</h1>
+    <p>Temukan Cita Rasa Jogja, Setiap Gigitan Jadi Petualangan!</p>
+</header>
+
+<div class="container">
+    <div class="hero-section">
+        <h1>Yummyogya - Sahabat Kuliner Jogja</h1>
+        <p>Yummyogya hadir untuk membantu wisatawan dan masyarakat lokal menemukan makanan khas Yogyakarta. Temukan makanan legendaris maupun yang belum dikenal, serta dukung UMKM lokal!</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <form method="GET" action="">
+            <input type="text" name="q" placeholder="Cari makanan..." value="{{ query|default:'' }}">
+            <button type="submit">Cari</button>
+        </form>
+    </div>
+
+    <!-- Daftar Makanan dalam Bentuk Card -->
+    <h2>Makanan Khas Jogja</h2>
+
+    <!-- Cek apakah ada makanan yang ditemukan -->
+    {% if page_obj %}
+        <div class="cards">
+            <!-- Iterasi setiap makanan yang dikirim dari views.py -->
+            {% for item in page_obj %}
+            <div class="card">
+                <img src="{{ item.gambar }}" alt="{{ item.nama }}">
+                <div class="card-body">
+                    <h3>{{ item.nama }}</h3>
+                    <p>{{ item.deskripsi }}</p>
+                    <p class="price">Harga: Rp {{ item.harga }}</p>
+                    <p class="restoran">Restoran: {{ item.restoran }}</p>
+                    <p>Rating: {{ item.rating }} / 5</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <a href="?q={{ query }}&page={{ page_obj.next_page_number }}">See More ></a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Tidak ada data makanan yang ditemukan.</p>
+    {% endif %}
+
+</div>
+
+<footer>
+    <p>&copy; 2024 Yummyogya. Semua hak dilindungi undang-undang.</p>
+</footer>
+
+</body>
+</html>
+
+{% endblock content %}
