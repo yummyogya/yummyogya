@@ -20,7 +20,7 @@ def show_main(request):
         'nama_web' : "yummyogya",
         'makanan': semua_makanan,
         'page_obj': page_obj,
-        'query': query 
+        'query': query ,
     }
 
     return render(request, "main.html", context)

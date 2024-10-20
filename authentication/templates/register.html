@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Register - Yummyogya</title>
+{% endblock meta %}
+
+{% block content %}
+<header style="background-color: #4CAF50; padding: 20px; text-align: center; color: white;">
+    <h1>Selamat Datang di Yummyogya</h1>
+    <p>Temukan Cita Rasa Jogja, Setiap Gigitan Jadi Petualangan!</p>
+</header>
+
+<div style="max-width: 700px; margin: 40px auto;">
+    <!-- Form Section with Title and Description inside the box -->
+    <div style="background-color: #fff; padding: 40px; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 4px 16px #0000001a;">
+        <!-- Title -->
+        <h1 style="font-size: 2.2em; font-weight: bold; margin-bottom: 10px;">Buat Akun Baru di Yummyogya</h1>
+        <p style="font-size: 1.1em; color: #666; margin-bottom: 30px;">Daftar dan nikmati kemudahan menemukan kuliner khas Yogyakarta!</p>
+
+        <!-- Register Form -->
+        <form method="POST" action="" style="display: flex; flex-direction: column;">
+            {% csrf_token %}
+            <div style="margin-bottom: 15px;">
+                <label for="username" style="font-weight: bold; display: block; margin-bottom: 5px;">Username:</label>
+                <input id="username" name="username" type="text" required style="padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 5px;" placeholder="Username">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="password1" style="font-weight: bold; display: block; margin-bottom: 5px;">Password:</label>
+                <input id="password1" name="password1" type="password" required style="padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 5px;" placeholder="Password">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="password2" style="font-weight: bold; display: block; margin-bottom: 5px;">Password confirmation:</label>
+                <input id="password2" name="password2" type="password" required style="padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 5px;" placeholder="Confirm Password">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <button type="submit" name="submit" style="padding: 10px 15px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%;">Register</button>
+            </div>
+        </form>
+
+        {% if messages %}
+        <ul style="color: red; margin-top: 20px; list-style: none; padding-left: 0;">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <!-- Link ke Login -->
+        <div style="margin-top: 20px; font-size: 14px; color: #666; text-align: center;">
+            Sudah punya akun?
+            <a href="{% url 'authentication:login' %}" style="font-weight: bold; color: #4CAF50; text-decoration: none;">Login di sini</a>
+        </div>
+    </div>
+</div>
+
+<footer style="background-color: #4CAF50; color: white; text-align: center; padding: 10px; margin-top: 20px;">
+    <p>&copy; 2024 Yummyogya. Semua hak dilindungi undang-undang.</p>
+</footer>
+{% endblock content %}
