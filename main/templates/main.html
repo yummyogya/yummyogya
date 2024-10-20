@@ -145,6 +145,16 @@
 <header>
     <h1>Selamat Datang di Yummyogya</h1>
     <p>Temukan Cita Rasa Jogja, Setiap Gigitan Jadi Petualangan!</p>
+    <!--Button Login/Register-->
+    <div class="space-x-4">
+        {% if user.is_authenticated %}
+            <a href="{% url 'authentication:logout' %}" class="text-white font-semibold hover:text-gray-300 text-align:right">
+              Logout</a>
+        {% else %}
+            <a href="{% url 'authentication:login' %}" class="text-white font-semibold hover:text-gray-300 text-align:right">
+              Login</a>
+        {% endif %}
+    </div>
 </header>
 
 <div class="container">
