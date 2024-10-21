@@ -8,6 +8,8 @@ import datetime
 
 
 # Create your views here.
+# Coba push ulang
+
 def register(request):
     form = UserCreationForm()
 
