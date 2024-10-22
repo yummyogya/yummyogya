@@ -11,12 +11,9 @@
                 <!-- Link Artikel -->
                 <a href="#article-section" class="text-white font-semibold hover:text-gray-300">Artikel</a>
                 <!-- Tombol Kontak (scroll ke footer) -->
-                <a href="#footer" class="text-white font-semibold hover:text-gray-300">Kontak</a>
-
-                <!-- Tombol Dashboard jika pengguna login -->
-                {% if user.is_authenticated %}
-                <a href="{% url 'dashboard:dashboard' %}" class="text-white font-semibold hover:text-gray-300">Dashboard</a>
-                {% endif %}
+                <a href="#footer" class="text-white font-semibold hover:text-gray-300">
+                    Kontak
+                </a>
             </div>
 
             <!-- Tombol Login/Logout -->
@@ -45,11 +42,6 @@
         <div class="pt-2 pb-3 space-y-1">
             <a href="#article-section" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Artikel</a>
             <a href="#footer" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Kontak</a>
-
-            <!-- Tombol Dashboard di mobile jika pengguna login -->
-            {% if user.is_authenticated %}
-                <a href="{% url 'dashboard:dashboard' %}" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Dashboard</a>
-            {% endif %}
 
             <!-- Tombol Login/Logout di mobile -->
             <div class="mt-4">
