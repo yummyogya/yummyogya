@@ -9,7 +9,6 @@ class MakananEntryForm(ModelForm):
                   'deskripsi',
                   'kategori',
                   'restoran',
-                  'harga',
                   'rating',
                   'gambar']
         
