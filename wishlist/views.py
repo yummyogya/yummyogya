@@ -1,25 +1,22 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Wishlist, Food
 from django.contrib.auth.decorators import login_required
-from django.apps import apps
-from .models import Wishlist
 
 @login_required
-def add_to_wishlist(request, product_id):
-    Makanan = apps.get_model('wishlist', 'Makanan')  
-    product = get_object_or_404(Makanan, id=product_id)
-    Wishlist.objects.get_or_create(user=request.user, product=product)
-    return redirect('wishlist')  
+def add_to_wishlist(request, food_id):
+    food = get_object_or_404(Food, id=food_id)
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+    wishlist.food.add(food)
+    return redirect('landing_page')  
 
 @login_required
-def wishlist_view(request):
-    wishlist_items = Wishlist.objects.filter(user=request.user)
-    return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
+def view_wishlist(request):
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+    return render(request, 'wishlist.html', {'wishlist': wishlist})
 
 @login_required
-def remove_from_wishlist(request, product_id):
-    Makanan = apps.get_model('wishlist', 'Makanan')  
-    product = get_object_or_404(Makanan, id=product_id)
-    wishlist_item = Wishlist.objects.filter(user=request.user, product=product)
-    if wishlist_item.exists():
-        wishlist_item.delete()
-    return redirect('wishlist')  
+def remove_from_wishlist(request, food_id):
+    food = get_object_or_404(Food, id=food_id)
+    wishlist = get_object_or_404(Wishlist, user=request.user)
+    wishlist.food.remove(food)
+    return redirect('view_wishlist')  # Redirect back to the wishlist page

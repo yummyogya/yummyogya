@@ -16,7 +16,7 @@
                 <!-- Tombol Dashboard jika pengguna login -->
                 {% if user.is_authenticated %}
                 <a href="{% url 'dashboard:dashboard' %}" class="text-white font-semibold hover:text-gray-300">Dashboard</a>
-                <a href="{% url 'wishlist' %}" class="text-white font-semibold hover:text-gray-300">Wishlist</a>
+                <a href="{% url 'wishlist:view_wishlist' %}" class="text-white font-semibold hover:text-gray-300">Wishlist</a>
                 {% endif %}
             </div>
 
@@ -50,7 +50,7 @@
             <!-- Tombol Dashboard dan Wishlist di mobile jika pengguna login -->
             {% if user.is_authenticated %}
                 <a href="{% url 'dashboard:dashboard' %}" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Dashboard</a>
-                <a href="{% url 'wishlist' %}" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Wishlist</a>
+                <a href="{% url 'wishlist:view_wishlist' %}" class="text-white font-semibold hover:text-gray-300">Wishlist</a>
             {% endif %}
 
             <!-- Tombol Login/Logout di mobile -->

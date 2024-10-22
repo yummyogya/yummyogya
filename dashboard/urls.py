@@ -9,3 +9,4 @@ urlpatterns = [
     path('edit_food/<int:pk>/', edit_food, name='edit_food'),
     path('delete_food/<int:pk>/', delete_food, name='delete_food'),
 ]
+
