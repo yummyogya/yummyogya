@@ -1,0 +1,73 @@
+/* Reset default margin dan padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif; /* Menggunakan font sans-serif */
+    background-color: #f9f9f9; /* Warna latar belakang */
+    padding: 20px; /* Padding di sekitar konten */
+}
+
+h2 {
+    margin-bottom: 20px; /* Jarak bawah untuk judul */
+    color: #333; /* Warna judul */
+}
+
+.btn {
+    background-color: #4CAF50; /* Warna latar belakang tombol */
+    color: white; /* Warna teks tombol */
+    padding: 10px 15px; /* Padding di dalam tombol */
+    text-decoration: none; /* Menghapus garis bawah */
+    border-radius: 5px; /* Membuat sudut tombol melengkung */
+    margin: 10px 0; /* Jarak vertikal tombol */
+    display: inline-block; /* Mengatur tombol sebagai elemen blok */
+}
+
+.btn:hover {
+    background-color: #45a049; /* Mengubah warna tombol saat hover */
+}
+
+.food-cards {
+    display: flex; /* Mengatur layout menjadi flexbox */
+    flex-wrap: wrap; /* Membungkus item ke baris berikutnya */
+    gap: 20px; /* Jarak antar card */
+}
+
+.card {
+    background-color: white; /* Warna latar belakang card */
+    border: 1px solid #ddd; /* Garis batas card */
+    border-radius: 8px; /* Sudut melengkung pada card */
+    padding: 15px; /* Padding di dalam card */
+    width: calc(25% - 20px); /* Mengatur lebar card */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bayangan card */
+    transition: transform 0.2s; /* Transisi saat hover */
+}
+
+.card:hover {
+    transform: scale(1.05); /* Membesar card saat hover */
+}
+
+.card img {
+    max-width: 100%; /* Memastikan gambar tidak melampaui lebar card */
+    height: auto; /* Mengatur tinggi gambar otomatis */
+    border-radius: 4px; /* Sudut melengkung pada gambar */
+}
+
+.card h3 {
+    margin: 10px 0; /* Jarak vertikal untuk judul makanan */
+    color: #333; /* Warna judul makanan */
+}
+
+.card p {
+    margin: 5px 0; /* Jarak vertikal untuk paragraf */
+    color: #555; /* Warna teks paragraf */
+}
+
+/* Mengatur warna untuk rating */
+.rating {
+    color: gold; /* Warna emas untuk rating */
+    margin: 5px 0; /* Jarak vertikal untuk rating */
+}

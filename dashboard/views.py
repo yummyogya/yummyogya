@@ -1,20 +1,15 @@
-# from django.shortcuts import render
-
 # Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Food
 from django.contrib.auth.decorators import login_required
 from .forms import FoodForm
 
-# ini di main.views apa di file ini ya?
-
-# def landing_page(request): 
-#     foods = Food.objects.all()
-#     return render(request, 'landing_page.html', {'foods': foods})
-
 @login_required
 def dashboard(request):
-    foods = Food.objects.filter(created_by=request.user)
+    if request.user.is_authenticated:
+        foods = Food.objects.filter(created_by=request.user)  # Ambil makanan yang dibuat oleh user saat ini
+    else:
+        foods = []  # Jika user tidak login, tidak ada makanan yang ditampilkan
     return render(request, 'dashboard.html', {'foods': foods})
 
 @login_required
@@ -25,7 +20,7 @@ def add_food(request):
             food = form.save(commit=False)
             food.created_by = request.user
             food.save()
-            return redirect('dashboard')
+            return redirect('dashboard:dashboard')
     else:
         form = FoodForm()
     return render(request, 'add_food.html', {'form': form})
@@ -37,15 +32,13 @@ def edit_food(request, pk):
         form = FoodForm(request.POST, instance=food)
         if form.is_valid():
             form.save()
-            return redirect('dashboard')
+            return redirect('dashboard:dashboard')
     else:
         form = FoodForm(instance=food)
     return render(request, 'edit_food.html', {'form': form})
 
 @login_required
 def delete_food(request, pk):
-    food = get_object_or_404(Food, pk=pk, created_by=request.user)
-    if request.method == 'POST':
-        food.delete()
-        return redirect('dashboard')
-    return render(request, 'delete_food.html', {'food': food})
+    food = get_object_or_404(Food, pk=pk)  # Ini akan mengembalikan 404 jika tidak ada
+    food.delete()
+    return redirect('dashboard:dashboard')  
