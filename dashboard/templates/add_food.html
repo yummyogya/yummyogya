@@ -1,6 +1,73 @@
-<h2>{{ form.instance.pk|yesno:"Edit,Tambah" }} Makanan</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Simpan</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ form.instance.pk|yesno:"Edit,Tambah" }} Makanan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: white; 
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form input, form select {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .cancel {
+            text-align: center;
+            display: block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .cancel:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>{{ form.instance.pk|yesno:"Edit,Tambah" }} Makanan</h2>
+        <form method="post" class="food-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Simpan</button>
+        </form>
+        <a href="{% url 'dashboard:dashboard' %}" class="btn cancel">Batal</a>
+    </div>
+</body>
+</html>
