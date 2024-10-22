@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Wishlist
-from yummyogya.models import Makanan  
+from wishlist.models import Makanan  
 
 @login_required
 def add_to_wishlist(request, product_id):
