@@ -5,9 +5,16 @@ from main.models import Makanan
 class Command(BaseCommand):
     help = 'Import data makanan dari CSV'
 
+    def add_arguments(self, parser):
+        parser.add_argument('csv_file', type=str, help="Path to the CSV file")
+
     def handle(self, *args, **kwargs):
-        with open('C:/Users/denma/Desktop/Farrell/UI/SI/SMT 3/PBP/yummyogya/Dataset yummyogya.csv', mode='r', encoding='utf-8') as file:
+
+        csv_file_path = kwargs['csv_file']
+        
+        with open(csv_file_path, mode='r') as file:
             reader = csv.DictReader(file)
+            
             for row in reader:
                 # Buat objek Makanan berdasarkan data di CSV
                 Makanan.objects.create(
