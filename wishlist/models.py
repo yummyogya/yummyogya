@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from wishlist.models import Product  
+from yummyogya.models import Product  
 
 class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
