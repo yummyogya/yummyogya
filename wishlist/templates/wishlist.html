@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Your Wishlist</h2>
+    
+    <div class="wishlist-container">
+        {% for item in wishlist_items %}
+        <div class="wishlist-card">
+            <h3>{{ item.product.name }}</h3>
+            <p>{{ item.product.description }}</p>
+            <p>Price: {{ item.product.price }}</p>
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="wishlist-img">
+            
+            <!-- Button to remove from wishlist -->
+            <a href="{% url 'remove_from_wishlist' item.product.id %}" class="remove-btn">Remove from Wishlist</a>
+        </div>
+        {% empty %}
+        <p>Your wishlist is empty!</p>
+        {% endfor %}
+    </div>
+{% endblock %}
