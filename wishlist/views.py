@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Wishlist
-from yummyogya.models import Product  
+from yummyogya.models import Makanan  
 
 @login_required
 def add_to_wishlist(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
+    product = get_object_or_404(Makanan, id=product_id)
     Wishlist.objects.get_or_create(user=request.user, product=product)
     return redirect('wishlist')  # Arahkan ke halaman wishlist setelah ditambah
 
@@ -16,7 +16,7 @@ def wishlist_view(request):
 
 @login_required
 def remove_from_wishlist(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
+    product = get_object_or_404(Makanan, id=product_id)
     wishlist_item = Wishlist.objects.filter(user=request.user, product=product)
     if wishlist_item.exists():
         wishlist_item.delete()
