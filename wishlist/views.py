@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Wishlist
-from myapp.models import Product  # Sesuaikan dengan nama app yang memuat model Product
+from yummyogya.models import Product  
 
 @login_required
 def add_to_wishlist(request, product_id):
