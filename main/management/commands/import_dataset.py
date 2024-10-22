@@ -9,21 +9,25 @@ class Command(BaseCommand):
         parser.add_argument('csv_file', type=str, help="Path to the CSV file")
 
     def handle(self, *args, **kwargs):
-
         csv_file_path = kwargs['csv_file']
-        
-        with open(csv_file_path, mode='r') as file:
+
+        # Menentukan encoding UTF-8 saat membuka file
+        with open(csv_file_path, mode='r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
-            
+
             for row in reader:
-                # Buat objek Makanan berdasarkan data di CSV
-                Makanan.objects.create(
-                    nama=row['Nama'],
-                    deskripsi=row['Deskripsi'],
-                    kategori=row['Kategori'],
-                    restoran=row['Restoran'],
-                    harga=row['Harga'],
-                    rating=row['Rating'],
-                    gambar=row.get('Foto', '')  # Kosongkan jika tidak ada gambar
-                )
-            self.stdout.write(self.style.SUCCESS('Data makanan berhasil diimport!'))
+                try:                   
+                    Makanan.objects.create(
+                        nama=row['Nama'],
+                        deskripsi=row['Deskripsi'],
+                        kategori=row['Kategori'],
+                        restoran=row['Restoran'],
+                        harga=int(row['Harga']),
+                        rating=row['Rating'],
+                        gambar=row.get('Foto', '')  # Kosongkan jika tidak ada gambar
+                    )
+                except ValueError:
+                    self.stdout.write(self.style.ERROR(f"Invalid value for 'Harga' in row: {row}"))
+                    continue
+
+        self.stdout.write(self.style.SUCCESS('Data makanan berhasil diimport!'))
