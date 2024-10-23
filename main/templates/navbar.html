@@ -5,28 +5,37 @@
             <div class="flex items-center">
                 <a href="/" class="text-white text-2xl font-bold">Yummyogya</a>
             </div>
-
+            
             <!-- Menu Utama -->
             <div class="hidden md:flex space-x-4">
-                <!-- Link Artikel -->
                 <a href="#article-section" class="text-white font-semibold hover:text-gray-300">Artikel</a>
-                <!-- Tombol Kontak (scroll ke footer) -->
                 <a href="#footer" class="text-white font-semibold hover:text-gray-300">Kontak</a>
-
-                <!-- Tombol Dashboard jika pengguna login -->
-                {% if user.is_authenticated %}
-                <a href="{% url 'dashboard:dashboard' %}" class="text-white font-semibold hover:text-gray-300">Dashboard</a>
-                <a href="{% url 'wishlist:view_wishlist' %}" class="text-white font-semibold hover:text-gray-300">Wishlist</a>
-                {% endif %}
             </div>
 
-            <!-- Tombol Login/Logout -->
+            <!-- Tombol Profile Dropdown -->
             <div class="hidden md:flex items-center space-x-4">
+                
+                
                 {% if user.is_authenticated %}
-                    <span class="text-white">Selamat datang, {{ user.username }}</span>
-                    <a href="{% url 'authentication:logout' %}" class="text-white font-semibold hover:text-gray-300">Logout</a>
+                <!-- Tombol Dropdown Profile -->
+                
+                <div class="relative">
+                    <button id="dropdownProfileButton" class="text-white font-semibold hover:text-gray-300 focus:outline-none">
+                        Selamat datang, {{ user.username }}
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="profileDropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden">
+                        <a href="{% url 'dashboard:dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                        <a href="{% url 'wishlist:view_wishlist' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Wishlist</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit Profile</a>
+                        <a href="{% url 'authentication:logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
+                <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                    <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                </div>
                 {% else %}
-                    <a href="{% url 'authentication:login' %}" class="text-white font-semibold hover:text-gray-300">Login</a>
+                <a href="{% url 'authentication:login' %}" class="text-white font-semibold hover:text-gray-300">Login</a>
                 {% endif %}
             </div>
 
@@ -46,31 +55,39 @@
         <div class="pt-2 pb-3 space-y-1">
             <a href="#article-section" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Artikel</a>
             <a href="#footer" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Kontak</a>
-
-            <!-- Tombol Dashboard dan Wishlist di mobile jika pengguna login -->
             {% if user.is_authenticated %}
-                <a href="{% url 'dashboard:dashboard' %}" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Dashboard</a>
-                <a href="{% url 'wishlist:view_wishlist' %}" class="text-white font-semibold hover:text-gray-300">Wishlist</a>
+            <a href="{% url 'dashboard:dashboard' %}" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Dashboard</a>
+            <a href="{% url 'wishlist:view_wishlist' %}" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Wishlist</a>
+            <a href="#" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Edit Profile</a>
+            <a href="{% url 'authentication:logout' %}" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Logout</a>
+            {% else %}
+            <a href="{% url 'authentication:login' %}" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Login</a>
             {% endif %}
-
-            <!-- Tombol Login/Logout di mobile -->
-            <div class="mt-4">
-                {% if user.is_authenticated %}
-                    <span class="block text-white px-3 py-2">Selamat datang, {{ user.username }}</span>
-                    <a href="{% url 'authentication:logout' %}" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Logout</a>
-                {% else %}
-                    <a href="{% url 'authentication:login' %}" class="block text-white font-semibold px-3 py-2 hover:bg-green-500">Login</a>
-                {% endif %}
-            </div>
         </div>
     </div>
-
-    <script>
-        const btn = document.querySelector("button.mobile-menu-button");
-        const menu = document.querySelector(".mobile-menu");
-
-        btn.addEventListener("click", () => {
-            menu.classList.toggle("hidden");
-        });
-    </script>
 </nav>
+
+<!-- Script for Dropdown -->
+<script>
+    const dropdownProfileButton = document.getElementById('dropdownProfileButton');
+    const profileDropdownMenu = document.getElementById('profileDropdownMenu');
+
+    dropdownProfileButton.addEventListener('click', function() {
+        profileDropdownMenu.classList.toggle('hidden');
+    });
+
+    // Close the dropdown when clicking outside
+    window.addEventListener('click', function(e) {
+        if (!dropdownProfileButton.contains(e.target)) {
+            profileDropdownMenu.classList.add('hidden');
+        }
+    });
+
+    // Mobile menu toggle
+    const btn = document.querySelector("button.mobile-menu-button");
+    const menu = document.querySelector(".mobile-menu");
+
+    btn.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+    });
+</script>
