@@ -1,9 +1,9 @@
 Nama,Deskripsi,Kategori,Restoran,Harga,Rating,Foto
-Sego Abang Jirak,Nasi merah dengan lauk pauk tradisional,Makanan Berat,Warung Sego Abang Indah,40000,4.6,https://sl.bing.net/cneGatOWNOu
-Cilok Gajahan,Cilok kenyal dengan isian daging,Jajanan,Cilok Gajahan Pak Sastro Utama,10000,4.1,https://sl.bing.net/I3UQZZ9GmW
-Brongkos,Daging sapi dimasak dengan santan kental,Makanan Berat,Warung Brongkos Handayani Makmur,38000,4.5,https://sl.bing.net/d9TQSPyqhiu
-Bakmi Jawa,Bakmi dengan kuah dan bumbu khas Jawa,Makanan Berat,Bakmi Jawa Mbah Mo Makmur,23000,4.4,https://sl.bing.net/hLJjSxzbscu
-Belalang Goreng,Belalang digoreng kering,Camilan Ekstrem,Pasar Godean Makmur,20000,4.8,https://sl.bing.net/gflFvYYb28i
+Sego Abang Jirak,Nasi merah dengan lauk pauk tradisional,Makanan Berat,Warung Sego Abang Indah,40000,4.6,https://media-cdn.tripadvisor.com/media/photo-s/15/c0/67/b7/screenshot-20181217-125943.jpg
+Cilok Gajahan,Cilok kenyal dengan isian daging,Jajanan,Cilok Gajahan Pak Sastro Utama,10000,4.1,https://bacajogja.id/wp-content/uploads/2021/08/cilok-gajahan.jpg
+Brongkos,Daging sapi dimasak dengan santan kental,Makanan Berat,Warung Brongkos Handayani Makmur,38000,4.5,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqFet5W2qFQJBgGv3ZP-qSF4uC351vZ9SDMw&s
+Bakmi Jawa,Bakmi dengan kuah dan bumbu khas Jawa,Makanan Berat,Bakmi Jawa Mbah Mo Makmur,23000,4.4,https://asset.kompas.com/crops/P3vaJiaIW8QtnQBJkEsrWX3EkFM=/74x23:952x609/750x500/data/photo/2021/05/21/60a732315e52e.jpg
+Belalang Goreng,Belalang digoreng kering,Camilan Ekstrem,Pasar Godean Makmur,20000,4.8,https://statik.tempo.co/data/2020/05/07/id_936525/936525_720.jpg
 Oseng Mercon,Oseng daging sapi pedas luar biasa,Makanan Pedas,Oseng Mercon Bu Narti Sejahtera,10000,4.4,https://sl.bing.net/p67vrkxFqC
 Coklat Monggo,Coklat yang menggunakan kakao asli tanpa campuran lemak lain selain dari biji kakao,Camilan Ekstrem,The Gunungan,42000,4.8,https://sl.bing.net/ffE613i6gW4
 Kipo,Kue kenyal manis khas Kotagede,Jajanan Tradisional,Toko Kue Kipo Bu Amanah Utama,10000,4.8,https://sl.bing.net/cTQbRfvN0b6
@@ -16,7 +16,7 @@ Sayur Lombok Ijo,Sayur tempe pedas khas Jogja,Makanan Pelengkap,Warung Sayur Tra
 Yangko,Kue kenyal berbentuk kotak dari tepung ketan,Oleh-oleh,Toko Oleh-oleh Khas Jogja Makmur,64000,4.5,https://sl.bing.net/hz2QWsnzrd6
 Brongkos,Daging sapi dimasak dengan santan kental,Makanan Berat,Warung Brongkos Handayani Indah,35000,4.6,https://sl.bing.net/b1jfEQRKPHo
 Bakpia Pathok Keju,Kue isi kacang hijau khas Jogja,Oleh-oleh,Bakpia Pathok 25 Lestari,28000,5,https://asset.kompas.com/crops/Vp7CguYmbbVF6T14quMsycZvt9E=/2x29:959x667/750x500/data/photo/2021/09/03/61320223d937e.jpg
-Bakmi Jawa,Bakmi dengan kuah dan bumbu khas Jawa,Makanan Berat,Bakmi Jawa Mbah Mo Raya,38000,4.5,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqFet5W2qFQJBgGv3ZP-qSF4uC351vZ9SDMw&s
+Bakmi Jawa,Bakmi dengan kuah dan bumbu khas Jawa,Makanan Berat,Bakmi Jawa Mbah Mo Raya,38000,4.5,https://asset.kompas.com/crops/P3vaJiaIW8QtnQBJkEsrWX3EkFM=/74x23:952x609/750x500/data/photo/2021/05/21/60a732315e52e.jpg
 Brongkos,Daging sapi dimasak dengan santan kental,Makanan Berat,Warung Brongkos Handayani Lestari,14000,5,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNr5_LquFVCoZQQXginz0-2cuDt4cKoaAlnw&s
 Gudeg,"Nangka muda dimasak dengan santan, khas Yogyakarta",Makanan Berat,Gudeg Yu Djum Indah,30000,4.6,https://img.inews.co.id/media/620/files/inews_new/2023/03/04/Asal_usul_gudeg.jpg
 Oseng Mercon,Oseng daging sapi pedas luar biasa,Makanan Pedas,Oseng Mercon Bu Narti Indah,22000,4,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRgW8HozxSd_cRjrB-vxJ69Bb3DX94BiqU-Q&s
@@ -60,7 +60,7 @@ Oseng Mercon,Oseng daging sapi pedas luar biasa,Makanan Pedas,Oseng Mercon Bu Na
 Gudeg,"Nangka muda dimasak dengan santan, khas Yogyakarta",Makanan Berat,Gudeg Yu Djum,20000,4.4,https://cdn-1.timesmedia.co.id/images/2022/12/21/gudeg-2.jpg
 Bakpia Pathok Coklat Keju,Kue isi kacang hijau khas Jogja,Oleh-oleh,Bakpia Pathok 25  Kembang Jaya,48000,4.6,https://cf.shopee.co.id/file/9e511e9358bd17d7647064c067654d43
 Oseng Mercon,Oseng daging sapi pedas luar biasa,Makanan Pedas,Oseng Mercon Tugu Jogja,60000,4.9,https://curupekspress.disway.id/upload/46dcb9dd1b85ae42e7c7c9b1275b0b12.jpg
-Bakmi Jawa,Bakmi dengan kuah dan bumbu khas Jawa,Makanan Berat,Bakmi Jawa Mbah Mo,49000,4.5,https://www.prjctreoco.com/wp-content/uploads/2021/04/bakmi-jawa-2.jpg?189db0&189db0
+Bakmi Jawa,Bakmi dengan kuah dan bumbu khas Jawa,Makanan Berat,Bakmi Jawa Mbah Mo,49000,4.5,https://asset.kompas.com/crops/P3vaJiaIW8QtnQBJkEsrWX3EkFM=/74x23:952x609/750x500/data/photo/2021/05/21/60a732315e52e.jpg
 Peyek Tumpuk,Peyek kacang yang ditumpuk,Oleh-oleh,Peyek Mbok Tum,42000,4,https://rentalmobiljogja.id/wp-content/uploads/2017/08/peyek-mbok-tumpuk.jpg
 Krecek,Kulit sapi dimasak dengan sambal,Pendamping Gudeg,Pasar Beringharjo,34000,4.6,https://cdn-brilio-net.akamaized.net/news/2020/10/02/193049/1323323-1000xauto-resep-olahan-krecek.jpg
 Enthok Slenget,Enthok dimasak pedas dengan rempah,Makanan Pedas,Warung Enthok Kang Tanir,91000,4.8,https://cdn.idntimes.com/content-images/community/2020/06/dscf6055-1024x683-896a5ab381ac66638ab61058b7f93a33.jpg
@@ -83,7 +83,7 @@ Sop Ayam Klaten,Sop Ayam gurih khas klaten,Makanan Berat,Sop Ayam Pak Min Klaten
 Brongkos,Daging sapi dimasak dengan santan kental,Makanan Berat,Warung Brongkos Handayani,30000,4.5,https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.idntimes.com%2Ffood%2Fdining-guide%2Ffatiya-1%2Fwarung-brongkos-paling-terkenal-di-yogyakarta-exp-c1c2&psig=AOvVaw2ow2UAeysTTx3MQ3U8mtjQ&ust=1728538261708000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKCEnP3IgIkDFQAAAAAdAAAAABAE
 Bakso,Aneka ragam bakso dan mie ayam,Makanan Berat,"Bakso Urat & Mie Ayam Rizky, Sorogenen",15000,4.4,https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/cbb2dc71-92ec-4f40-befc-0d0fbc4091f2_5ac12c36-d863-4d39-901f-d1420c998fc4_Go-Biz_20190124_144203.jpeg
 Ayam Kremes,Nasi ayam goreng dengan kremesan,Makanan Berat,Ayam Bakar Kremes Bu Rose,23000,4.7,https://dzglkev4c34xb.cloudfront.net/horego.com/umbulharjo/restaurant/ayam-bakar-kremes-bu-rose-/food/af1qiposdin7dqunwmlzziga6dgcje8gscxsjc0vnngk.jpg
-Bakmi Jawa,Bakmi dengan kuah dan bumbu khas Jawa,Makanan Berat,Bakmi Jawa Mbah Mo Indah,20000,4,https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.simplyhomy.com%2F2019%2F12%2Fkuliner-khas-jogja-2%2F&psig=AOvVaw3-IxOODqAETaXlVgWFAJLL&ust=1728472055856000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLDlu63S_ogDFQAAAAAdAAAAABAE
+Bakmi Jawa,Bakmi dengan kuah dan bumbu khas Jawa,Makanan Berat,Bakmi Jawa Mbah Mo Indah,20000,4, https://asset.kompas.com/crops/P3vaJiaIW8QtnQBJkEsrWX3EkFM=/74x23:952x609/750x500/data/photo/2021/05/21/60a732315e52e.jpg
 Soto Lenthok,Soto ayam dengan perkedel ketela,Makanan Berat,Soto Lenthok Pak Gareng Utama,15000,4.7,https://www.google.com/url?sa=i&url=https%3A%2F%2Fjogja.babad.id%2Fkuliner%2F103511118227%2Fnikmati-kuliner-legendaris-cuma-rp12-ribuan-ini-dia-racikan-soto-lenthok-pak-gareng-sudah-melegenda-sejak-1995&psig=AOvVaw1o28z5_i_ybxrwv-a7DWrp&ust=1728472099118000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPj3-r3S_ogDFQAAAAAdAAAAABAE
 Belalang Goreng,Belalang digoreng kering,Camilan Ekstrem,Pasar Godean Utama,35000,4.2,https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.solopos.com%2Fbelalang-goreng-khas-gunung-kidul-jadi-buruan-wisatawan-berani-coba-1140426&psig=AOvVaw2brmyMxJS924n_DubgBGGy&ust=1728472168984000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMDOoN3S_ogDFQAAAAAdAAAAABAE
 Krecek,Kulit sapi dimasak dengan sambal,Pendamping Gudeg,Pasar Beringharjo Lestari,15000,4.9,https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.kompas.com%2Ffood%2Fread%2F2022%2F12%2F15%2F200500075%2Fresep-sambal-goreng-krecek-untuk-lauk-pelengkap-gudeg&psig=AOvVaw0mPtp2PSlxuR1eogWrvFYz&ust=1728472227920000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMDyuvrS_ogDFQAAAAAdAAAAABAE

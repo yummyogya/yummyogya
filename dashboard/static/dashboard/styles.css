@@ -14,6 +14,7 @@ body {
 h2 {
     margin-bottom: 20px; /* Jarak bawah untuk judul */
     color: #333; /* Warna judul */
+    font-weight: bold;
 }
 
 .btn {
@@ -70,4 +71,42 @@ h2 {
 .rating {
     color: gold; /* Warna emas untuk rating */
     margin: 5px 0; /* Jarak vertikal untuk rating */
+}
+
+/* Memusatkan container Dashboard */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Memusatkan secara horizontal */
+    justify-content: center; /* Memusatkan secara vertikal */
+    margin-bottom: 1rem; /* Jarak antara tombol dan card */
+}
+
+/* Styling untuk judul dashboard */
+.dashboard-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem; /* Jarak kecil antara judul dan tombol */
+}
+
+/* Styling tombol tambah makanan */
+.add-food-btn {
+    padding: 8px 16px; /* Mengurangi padding untuk tombol */
+    background-color: #4CAF50; /* Warna hijau */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    margin-bottom: 0.5rem; /* Jarak kecil antara tombol dan card */
+}
+
+.add-food-btn:hover {
+    background-color: #45a049; /* Warna hover */
+}
+
+/* Mengurangi jarak antar card */
+.food-cards {
+    margin-top: 0; /* Menghilangkan jarak dari elemen sebelumnya */
+    padding: 0;
 }

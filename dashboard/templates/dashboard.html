@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,40 +6,67 @@
     <title>Dashboard</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'dashboard/styles.css' %}"> <!-- Sesuaikan path ke file CSS -->
+    <style>
+        .card {
+            position: relative; /* Agar posisi ikon bisa menggunakan posisi relatif dari card */
+        }
+        .edit-icon,
+        .delete-icon {
+            position: absolute;
+            top: 10px; /* Jarak dari atas */
+            right: 10px; /* Jarak dari kanan */
+            width: 24px; /* Ukuran ikon */
+            height: 24px; /* Ukuran ikon */
+        }
+    </style>
 </head>
 <body>
-    <h2>Dashboard Kamu</h2>
+    <div class="dashboard-container flex flex-col items-center justify-center min-h-screen">
+        <h2 class="dashboard-title">Dashboard Kamu</h2>
 
-    <a href="{% url 'dashboard:add_food' %}" class="btn">Tambah Makanan Baru</a>
+        <a href="{% url 'dashboard:add_food' %}" class="btn add-food-btn">Tambah Makanan Baru</a>
+    </div>
 
     {% if foods %}
-      <div class="food-cards">
+      <div class="food-cards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {% for food in foods %}
-            <div class="card">
-                <img src="{{ food.image_url }}" alt="{{ food.name }}" style="max-width:200px;">
-                <h3>{{ food.name }}</h3>
-                <p>{{ food.description }}</p>
-                <h5>
-                  <!-- Gambar lokasi disamping kiri nama restoran -->
-                  <img src="https://static.vecteezy.com/system/resources/previews/000/583/611/original/location-icon-vector.jpg" alt="Location icon" style="width: 20px; vertical-align: middle; margin-right: 8px;">
-                  {{ food.restaurant }}
-                </h5>
-                <!-- <p class="rating">Rating: {{ food.rating|floatformat:1 }}</p> -->
-                <div class="rating">
-                  <!-- Menampilkan rating dengan ikon bintang -->
-                  {% for i in "1" %}
-                      <img src="https://static.vecteezy.com/system/resources/previews/000/367/368/original/star-vector-icon.jpg" alt="Star icon" style="width: 20px; vertical-align: middle; margin-right: 2px;">
-                  {% endfor %}
-                  <span style="color: black;">{{ food.rating|floatformat:1 }}</span>
+            <div class="card relative shadow-lg rounded-lg overflow-hidden bg-white">
+                <!-- Gambar makanan -->
+                <div class="image-container">
+                    <img src="{{ food.image_url }}" alt="{{ food.name }}" class="object-cover w-full">
                 </div>
-                <div class="price">
-                <!-- Gambar ikon dollar untuk menggantikan tulisan harga -->
-                <img src="https://pngimg.com/uploads/dollar_sign/dollar_sign_PNG37.png" alt="Dollar icon" style="width: 20px; vertical-align: middle; margin-right: 5px;">
-                <span>{{ food.price }}</span>
-                </div>
-                <div class="card-buttons">
-                    <a href="{% url 'dashboard:edit_food' food.pk %}" class="btn">Edit</a>
-                    <a href="{% url 'dashboard:delete_food' food.pk %}" class="btn">Hapus</a>
+                
+                <div class="card-body p-4">
+                    <h3 class="text-lg font-semibold">{{ food.name }}</h3>
+                    <p>{{ food.description }}</p>
+
+                    <div class="price font-bold mt-2 flex items-center">
+                        <!-- Gambar ikon dollar -->
+                        <img src="https://pngimg.com/uploads/dollar_sign/dollar_sign_PNG37.png" alt="Dollar icon" style="width: 20px; vertical-align: middle; margin-right: 8px;" class="w-4 h-4 mr-2">
+                        Rp {{ food.price }}
+                    </div>
+
+                    <div class="restoran flex items-center mt-2">
+                        <!-- Gambar ikon lokasi -->
+                        <img src="https://static.vecteezy.com/system/resources/previews/000/583/611/original/location-icon-vector.jpg" alt="Location icon" style="width: 20px; vertical-align: middle; margin-right: 8px;" class="w-4 h-4 mr-2">
+                        {{ food.restaurant }}
+                    </div>
+
+                    <div class="rating flex items-center mt-2">
+                        <!-- Gambar ikon bintang -->
+                        <img src="https://static.vecteezy.com/system/resources/previews/000/367/368/original/star-vector-icon.jpg" alt="Star icon" style="width: 20px; vertical-align: middle; margin-right: 8px;" class="w-4 h-4 mr-2">
+                        {{ food.rating }} / 5
+                    </div>
+                    
+                    <div class="card-buttons mt-4 flex">
+                        <!-- Tombol Edit dengan ikon pensil -->
+                        <a href="{% url 'dashboard:edit_food' food.pk %}" class="btn bg-blue-500 text-white hover:bg-blue-700 rounded-lg p-2" title="Edit">
+                            <img src="https://icon-library.com/images/edit-svg-icon/edit-svg-icon-22.jpg" alt="Edit" style="width: 20px; height: 20px;">
+                        </a>
+                        <a href="{% url 'dashboard:delete_food' food.pk %}" class="btn bg-red-500 text-white hover:bg-red-700 rounded-lg p-2 ml-2" title="Hapus">
+                            <img src="https://static-00.iconduck.com/assets.00/delete-icon-1864x2048-bp2i0gor.png" alt="Edit" style="width: 20px; height: 20px;">
+                        </a>
+                    </div>
                 </div>
             </div>
         {% endfor %}

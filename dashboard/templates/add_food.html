@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: white; 
+            background: white;
             margin: 0;
             padding: 20px;
             color: #333;
@@ -51,23 +51,75 @@
             text-align: center;
             display: block;
             margin-top: 15px;
-            color: #007bff;
+            color: red;
             text-decoration: none;
         }
         .cancel:hover {
             text-decoration: underline;
+        }
+        #success-message, #error-message {
+            display: none;
+            padding: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        #success-message {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        #error-message {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>{{ form.instance.pk|yesno:"Edit,Tambah" }} Makanan</h2>
-        <form method="post" class="food-form">
+        
+        <!-- Message alerts -->
+        <div id="success-message">Makanan berhasil ditambahkan!</div>
+        <div id="error-message">Terjadi kesalahan. Silakan coba lagi.</div>
+
+        <form method="post" class="food-form" id="food-form">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn">Simpan</button>
         </form>
         <a href="{% url 'dashboard:dashboard' %}" class="btn cancel">Batal</a>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#food-form').on('submit', function(event) {
+                event.preventDefault();  // Mencegah reload halaman
+
+                // Ambil data dari form
+                var formData = $(this).serialize();
+                
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'dashboard:add_food' %}",  // URL tujuan AJAX
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            // Tampilkan pesan sukses dan reset form
+                            $('#success-message').text(response.message).fadeIn();
+                            $('#error-message').fadeOut();
+                            $('#food-form')[0].reset();  // Reset form
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Tampilkan pesan error
+                        $('#error-message').text('Terjadi kesalahan. Silakan coba lagi.').fadeIn();
+                        $('#success-message').fadeOut();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

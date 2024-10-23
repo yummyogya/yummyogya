@@ -1,6 +1,113 @@
-<h2>{{ form.instance.pk|yesno:"Edit,Tambah" }} Makanan</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Simpan</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Makanan: {{ food.name }}</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: white; 
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form input, form select {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .cancel {
+            text-align: center;
+            display: block;
+            margin-top: 15px;
+            color: red;
+            text-decoration: none;
+        }
+        .cancel:hover {
+            text-decoration: underline;
+        }
+        #success-message, #error-message {
+            display: none;
+            margin-top: 15px;
+            text-align: center;
+        }
+        #success-message {
+            color: green;
+        }
+        #error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Edit Makanan: {{ food.name }}</h2>
+        <form method="post" class="food-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Simpan</button>
+        </form>
+        <div id="success-message"></div>
+        <div id="error-message"></div>
+        <a href="{% url 'dashboard:dashboard' %}" class="btn cancel">Batal</a>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.food-form').on('submit', function(e) {
+                e.preventDefault(); // Mencegah form dari pengiriman default
+                
+                var formData = $(this).serialize(); // Mengambil data dari form
+                
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "dashboard:edit_food" food.pk %}', // Ganti dengan URL yang sesuai
+                    data: formData,
+                    success: function(response) {
+                        $('#success-message').text(response.message).fadeIn();
+                        $('#error-message').fadeOut();
+                        // Mungkin kita ingin mengupdate UI lebih lanjut atau mengalihkan
+                    },
+                    error: function(xhr, status, error) {
+                        $('#error-message').text('Terjadi kesalahan. Silakan coba lagi.').fadeIn();
+                        $('#success-message').fadeOut();
+                        console.log(xhr.responseText); // Tampilkan error di konsol
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
