@@ -1,22 +1,43 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Wishlist, Food
+from django.shortcuts import render, redirect
+from .models import Food, Wishlist
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import JsonResponse
 
 @login_required
 def add_to_wishlist(request, food_id):
-    food = get_object_or_404(Food, id=food_id)
-    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-    wishlist.food.add(food)
-    return redirect('landing_page')  
+    food = Food.objects.filter(id=food_id).first()
+    
+    if food is None:
+        messages.error(request, "Food item not found.")
+        return redirect('wishlist:view_wishlist')
 
-@login_required
-def view_wishlist(request):
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-    return render(request, 'wishlist.html', {'wishlist': wishlist})
+    wishlist.foods.add(food)
+    
+    wishlist_count = wishlist.foods.count()
+    
+    if request.is_ajax():
+        return JsonResponse({'wishlist_count': wishlist_count}, status=200)
+    
+    messages.success(request, f'{food.name} has been added to your wishlist!')
+    return redirect('wishlist:view_wishlist')
+
+def view_wishlist(request):
+    wishlist = Wishlist.objects.get(user=request.user)  
+    context = {'wishlist': wishlist}
+    return render(request, 'wishlist.html', context)
 
 @login_required
 def remove_from_wishlist(request, food_id):
-    food = get_object_or_404(Food, id=food_id)
-    wishlist = get_object_or_404(Wishlist, user=request.user)
-    wishlist.food.remove(food)
-    return redirect('view_wishlist')  # Redirect back to the wishlist page
+    food = Food.objects.filter(id=food_id).first()
+    
+    if food is None:
+        messages.error(request, "Food item not found.")
+        return redirect('wishlist:view_wishlist')
+
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+    wishlist.foods.remove(food)
+    
+    messages.success(request, f'{food.name} has been removed from your wishlist.')
+    return redirect('wishlist:view_wishlist')
