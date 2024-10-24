@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'authentication',
     'dashboard',
     'wishlist',
-    'searchpage'
 ]
 
 MIDDLEWARE = [

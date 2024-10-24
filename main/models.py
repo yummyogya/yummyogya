@@ -28,4 +28,5 @@ class Makanan(models.Model):
         ordering = ['nama']  # Urutan makanan berdasarkan nama
 
     def __str__(self):
-        return self.nama
+        return self.nama    
+    
