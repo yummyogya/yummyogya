@@ -8,15 +8,40 @@
     <link rel="stylesheet" href="{% static 'dashboard/styles.css' %}"> <!-- Sesuaikan path ke file CSS -->
     <style>
         .card {
-            position: relative; /* Agar posisi ikon bisa menggunakan posisi relatif dari card */
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .image-container {
+            width: 100%;
+            height: 200px;
+            margin: 0;
+            padding: 0;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .card-body {
+            padding: 16px; /* Tambahkan padding agar teks tidak terlalu mepet ke kiri */
         }
         .edit-icon,
         .delete-icon {
             position: absolute;
-            top: 10px; /* Jarak dari atas */
-            right: 10px; /* Jarak dari kanan */
-            width: 24px; /* Ukuran ikon */
-            height: 24px; /* Ukuran ikon */
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+        }
+        .card-buttons a {
+            margin-right: 8px; /* Tambahkan margin untuk memberi jarak antar tombol */
+        }
+        .rating {
+            color: black; /* Mengubah warna tulisan rating menjadi hitam */
         }
     </style>
 </head>
@@ -33,7 +58,7 @@
             <div class="card relative shadow-lg rounded-lg overflow-hidden bg-white">
                 <!-- Gambar makanan -->
                 <div class="image-container">
-                    <img src="{{ food.image_url }}" alt="{{ food.name }}" class="object-cover w-full">
+                    <img src="{{ food.image_url }}" alt="{{ food.name }}">
                 </div>
                 
                 <div class="card-body p-4">
@@ -41,30 +66,28 @@
                     <p>{{ food.description }}</p>
 
                     <div class="price font-bold mt-2 flex items-center">
-                        <!-- Gambar ikon dollar -->
                         <img src="https://pngimg.com/uploads/dollar_sign/dollar_sign_PNG37.png" alt="Dollar icon" style="width: 20px; vertical-align: middle; margin-right: 8px;" class="w-4 h-4 mr-2">
-                        Rp {{ food.price }}
+                        Rp {% with price=food.price|stringformat:"d" %}
+                        {{ price|slice:":-3" }}.{{ price|slice:"-3:" }}
+                        {% endwith %}
                     </div>
 
                     <div class="restoran flex items-center mt-2">
-                        <!-- Gambar ikon lokasi -->
                         <img src="https://static.vecteezy.com/system/resources/previews/000/583/611/original/location-icon-vector.jpg" alt="Location icon" style="width: 20px; vertical-align: middle; margin-right: 8px;" class="w-4 h-4 mr-2">
                         {{ food.restaurant }}
                     </div>
 
                     <div class="rating flex items-center mt-2">
-                        <!-- Gambar ikon bintang -->
                         <img src="https://static.vecteezy.com/system/resources/previews/000/367/368/original/star-vector-icon.jpg" alt="Star icon" style="width: 20px; vertical-align: middle; margin-right: 8px;" class="w-4 h-4 mr-2">
-                        {{ food.rating }} / 5
+                        {{ food.rating|floatformat:1 }} / 5 <!-- Menampilkan 1 angka di belakang koma -->
                     </div>
                     
                     <div class="card-buttons mt-4 flex">
-                        <!-- Tombol Edit dengan ikon pensil -->
                         <a href="{% url 'dashboard:edit_food' food.pk %}" class="btn bg-blue-500 text-white hover:bg-blue-700 rounded-lg p-2" title="Edit">
                             <img src="https://icon-library.com/images/edit-svg-icon/edit-svg-icon-22.jpg" alt="Edit" style="width: 20px; height: 20px;">
                         </a>
-                        <a href="{% url 'dashboard:delete_food' food.pk %}" class="btn bg-red-500 text-white hover:bg-red-700 rounded-lg p-2 ml-2" title="Hapus">
-                            <img src="https://static-00.iconduck.com/assets.00/delete-icon-1864x2048-bp2i0gor.png" alt="Edit" style="width: 20px; height: 20px;">
+                        <a href="{% url 'dashboard:delete_food' food.pk %}" class="btn bg-red-500 text-white hover:bg-red-700 rounded-lg p-2" title="Hapus">
+                            <img src="https://static-00.iconduck.com/assets.00/delete-icon-1864x2048-bp2i0gor.png" alt="Delete" style="width: 20px; height: 20px;">
                         </a>
                     </div>
                 </div>
