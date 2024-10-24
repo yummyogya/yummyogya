@@ -14,7 +14,6 @@ def add_to_wishlist(request, food_id):
 
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
     wishlist.foods.add(food)
-    
     wishlist_count = wishlist.foods.count()
     
     if request.is_ajax():
@@ -38,6 +37,5 @@ def remove_from_wishlist(request, food_id):
 
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
     wishlist.foods.remove(food)
-    
     messages.success(request, f'{food.name} has been removed from your wishlist.')
     return redirect('wishlist:view_wishlist')
