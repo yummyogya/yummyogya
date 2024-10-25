@@ -1,6 +1,5 @@
 from django.http import HttpResponse
-from django.core import serializers# main/views.py
-# main/views.py
+from django.core import serializers
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.http import JsonResponse
@@ -9,12 +8,19 @@ from dashboard.models import Food
 
 def show_main(request):
     query = request.GET.get('q')
-    
-    # Ambil makanan dari model Makanan dan Food (dashboard)
-    semua_makanan = Makanan.objects.filter(nama__icontains=query) if query else Makanan.objects.all()
-    user_makanan = Food.objects.filter(name__icontains=query) if query else Food.objects.all()
 
-    # Gabungkan hasil dari dua model
+    # Ambil makanan umum dari model Makanan
+    semua_makanan = Makanan.objects.filter(nama__icontains=query) if query else Makanan.objects.all()
+
+    # Ambil makanan yang hanya dibuat oleh user yang sedang login
+    if request.user.is_authenticated:
+        user_makanan = Food.objects.filter(created_by=request.user)
+        if query:
+            user_makanan = user_makanan.filter(name__icontains=query)
+    else:
+        user_makanan = Food.objects.none()  # Tidak ada makanan jika user tidak login
+
+    # Gabungkan hasil dari dua model (makanan umum dan makanan user yang login)
     combined_makanan = list(semua_makanan) + list(user_makanan)
 
     # Pagination
@@ -29,14 +35,24 @@ def show_main(request):
     }
     return render(request, "main.html", context)
 
+
 # Fungsi untuk handling request AJAX
 def search_ajax(request):
     query = request.GET.get('q', '')
+    
+    # Ambil makanan umum dari model Makanan
     makanan_list = Makanan.objects.filter(nama__icontains=query) if query else Makanan.objects.all()
-    user_makanan_list = Food.objects.filter(name__icontains=query) if query else Food.objects.all()
+    
+    # Ambil makanan yang hanya dibuat oleh user yang sedang login
+    if request.user.is_authenticated:
+        user_makanan_list = Food.objects.filter(created_by=request.user)
+        if query:
+            user_makanan_list = user_makanan_list.filter(name__icontains=query)
+    else:
+        user_makanan_list = Food.objects.none()  # Tidak ada makanan jika user tidak login
 
     combined_makanan = list(makanan_list) + list(user_makanan_list)
-    
+
     # Mengemas hasil pencarian menjadi format JSON yang dapat di-render
     makanan_data = []
     for makanan in combined_makanan:

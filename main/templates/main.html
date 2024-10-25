@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-
 {% block content %}
 {% include 'navbar.html' %}
+{% load static %}
 
 <style>
     .container {
@@ -10,57 +10,77 @@
         margin: 20px auto;
     }
 
+    /* Hero section dengan overlay gelap */
     .hero-section {
-            text-align: center;
-            padding: 50px 20px;
-            background-color: #ffffff;
-            margin-bottom: 20px;
-        }
+        position: relative;
+        text-align: center;
+        padding: 100px 20px;
+        background-image: url("{% static 'img/wallpaper.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        color: white;
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
 
-        .hero-section h1 {
-            font-weight: bold;
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5); /* Overlay gelap */
+        border-radius: 8px;
+    }
 
-        .hero-section p {
-            font-size: 1.2em;
-            color: #666;
-        }
-    
-        .article-section {
-            background-color: #ffffff;
-            padding: 30px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+    .hero-section h1, .hero-section p {
+        position: relative;
+        z-index: 10; /* Agar berada di atas overlay */
+    }
 
-        .article-section h2 {
-            font-size: 2.5em;
-            color: #4CAF50;
-            margin-bottom: 15px;
-        }
+    .hero-section h1 {
+        font-weight: bold;
+        font-size: 3em;
+        margin-bottom: 10px;
+    }
 
-        .article-section p {
-            font-size: 1.2em;
-            color: #333;
-            margin-bottom: 15px;
-        }
+    .hero-section p {
+        font-size: 1.2em;
+        color: #f1f1f1;
+    }
 
-        .article-section .btn-read-more {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1.1em;
-            cursor: pointer;
-        }
+    /* Style baru sesuai tone gambar */
+    .article-section {
+        background-color: #ffffff;
+        padding: 30px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
 
-        .article-section .btn-read-more:hover {
-            background-color: #45a049;
-        }
+    .article-section h2 {
+        font-size: 2.5em;
+        color: #FF6600; /* Warna sesuai tone gambar */
+        margin-bottom: 15px;
+    }
+
+    .article-section p {
+        font-size: 1.2em;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .article-section .btn-read-more {
+        background-color: #FF6600;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 1.1em;
+        cursor: pointer;
+    }
+
+    .article-section .btn-read-more:hover {
+        background-color: #FF4500;
+    }
 
     .search-bar {
         margin-bottom: 20px;
@@ -78,7 +98,7 @@
     .search-bar button {
         padding: 10px 15px;
         font-size: 16px;
-        background-color: #4CAF50;
+        background-color: #FF6600;
         color: white;
         border: none;
         border-radius: 5px;
@@ -138,18 +158,18 @@
     .pagination a {
         margin: 0 5px;
         padding: 10px 15px;
-        background-color: #4CAF50;
+        background-color: #FF6600;
         color: white;
         text-decoration: none;
         border-radius: 5px;
     }
 
     .pagination a:hover {
-        background-color: #45a049;
+        background-color: #FF4500;
     }
-    
+
     footer {
-        background-color: #4CAF50;
+        background-color: #FF6600;
         color: white;
         text-align: center;
         padding: 10px;
@@ -169,14 +189,14 @@
         <p>Kuliner Yogyakarta memiliki akar budaya yang sangat dalam, mulai dari makanan tradisional Keraton hingga jajanan pasar yang tetap lestari hingga kini.</p>
         <a href="#" class="inline-flex items-center font-medium text-green-600 hover:text-green-800 dark:text-green-500 dark:hover:text-green-700">
             Selengkapnya 
-            <svg class=" w-2.5 h-2.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+            <svg class="w-2.5 h-2.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
             </svg>
         </a>
     </div>
 
     <div class="search-bar">
-        <input type="text" id="search-query" value="{{ query }}" placeholder="Cari makanan..." >
+        <input type="text" id="search-query" value="{{ query }}" placeholder="Cari makanan...">
         <button id="search-button">Cari</button>
     </div>
 
@@ -243,7 +263,7 @@
 
                                 <div class="card-body p-4">
                                     <h3 class="text-lg font-semibold">${item.nama}</h3>
-                                    <p>${item.deskripsi }</p>
+                                    <p>${item.deskripsi}</p>
                                     <p class="price font-bold mt-2">Harga: Rp ${item.harga}</p>
                                     <p class="restoran">Restoran: ${item.restoran}</p>
                                     <p>Rating: ${item.rating} / 5</p>
@@ -263,6 +283,5 @@
         });
     });
 </script>
-    
 
 {% endblock %}
