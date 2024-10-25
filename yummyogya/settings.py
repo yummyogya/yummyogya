@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'authentication',
     'dashboard',
     'wishlist',
+    'profilepage'
 ]
 
 MIDDLEWARE = [

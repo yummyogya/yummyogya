@@ -7,4 +7,5 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),  # dashboard URL seharusnya hanya di sini
     path('wishlist/', include('wishlist.urls')),    # wishlist URL hanya di sini
     path('authentication/', include('authentication.urls')),
+    path('profilepage/', include('profilepage.urls')),
 ]
