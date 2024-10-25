@@ -4,31 +4,39 @@
 {% load static %}
 
 <style>
+    /* Font styling untuk aesthetic modern */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
+
     .container {
         padding-top: 100px;
         width: 80%;
         margin: 20px auto;
     }
 
-    /* Hero section dengan overlay gelap */
+    /* Hero section dengan overlay lembut dan sentuhan elegan */
     .hero-section {
         position: relative;
         text-align: center;
-        padding: 100px 20px;
+        padding: 120px 20px;
         background-image: url("{% static 'img/wallpaper.jpg' %}");
         background-size: cover;
         background-position: center;
         color: white;
-        margin-bottom: 20px;
-        border-radius: 8px;
+        margin-bottom: 40px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
     .hero-section::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.5); /* Overlay gelap */
-        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.6); /* Overlay lembut */
+        border-radius: 16px;
     }
 
     .hero-section h1, .hero-section p {
@@ -37,143 +45,172 @@
     }
 
     .hero-section h1 {
-        font-weight: bold;
-        font-size: 3em;
-        margin-bottom: 10px;
+        font-weight: 700;
+        font-size: 4em;
+        margin-bottom: 20px;
+        letter-spacing: 0.05em;
     }
 
     .hero-section p {
-        font-size: 1.2em;
+        font-size: 1.4em;
         color: #f1f1f1;
+        max-width: 700px;
+        margin: 0 auto;
     }
 
-    /* Style baru sesuai tone gambar */
+    /* Style baru sesuai tone gambar dan ruang kosong */
     .article-section {
         background-color: #ffffff;
-        padding: 30px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 50px 40px;
+        margin-bottom: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
     }
 
     .article-section h2 {
-        font-size: 2.5em;
-        color: #FF6600; /* Warna sesuai tone gambar */
-        margin-bottom: 15px;
+        font-size: 3em;
+        color: #FF6600;
+        margin-bottom: 20px;
     }
 
     .article-section p {
         font-size: 1.2em;
         color: #333;
-        margin-bottom: 15px;
+        margin-bottom: 25px;
+        max-width: 800px;
+        margin: 0 auto 30px;
     }
 
     .article-section .btn-read-more {
         background-color: #FF6600;
         color: white;
-        padding: 10px 20px;
+        padding: 12px 30px;
         text-decoration: none;
-        border-radius: 5px;
+        border-radius: 8px;
         font-size: 1.1em;
-        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
     }
 
     .article-section .btn-read-more:hover {
         background-color: #FF4500;
     }
 
+    /* Search bar styling yang lebih modern */
     .search-bar {
-        margin-bottom: 20px;
+        margin-bottom: 30px;
         text-align: center;
     }
 
     .search-bar input[type="text"] {
-        padding: 10px;
-        font-size: 16px;
-        width: 300px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        padding: 15px;
+        font-size: 18px;
+        width: 400px;
+        border: 2px solid #FF6600;
+        border-radius: 8px;
+        transition: border-color 0.3s ease;
+    }
+
+    .search-bar input[type="text"]:focus {
+        border-color: #FF4500;
+        outline: none;
     }
 
     .search-bar button {
-        padding: 10px 15px;
-        font-size: 16px;
+        padding: 14px 20px;
+        font-size: 18px;
         background-color: #FF6600;
         color: white;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
         cursor: pointer;
+        transition: background-color 0.3s ease;
     }
 
+    .search-bar button:hover {
+        background-color: #FF4500;
+    }
+
+    /* Styling untuk kartu produk */
     .cards {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
+        gap: 30px;
+        margin-top: 40px;
     }
 
     .card {
         background-color: #fff;
         border: 1px solid #ddd;
-        border-radius: 8px;
+        border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .card img {
         width: 100%;
-        height: 200px;
+        height: 250px;
         object-fit: cover;
     }
 
     .card:hover {
-        transform: scale(1.02);
+        transform: scale(1.03);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
 
     .card-body {
-        padding: 15px;
+        padding: 20px;
+        text-align: center;
     }
 
     .card-body h3 {
-        font-size: 1.5em;
-        margin-bottom: 10px;
+        font-size: 1.6em;
+        margin-bottom: 12px;
+        font-weight: 600;
     }
 
     .card-body p {
         color: #666;
+        margin-bottom: 15px;
     }
 
     .card-body .price {
-        font-weight: bold;
-        margin-top: 10px;
+        font-weight: 700;
+        font-size: 1.3em;
+        color: #FF6600;
     }
 
+    /* Pagination styling */
     .pagination {
         display: flex;
         justify-content: center;
-        margin-top: 20px;
+        margin-top: 40px;
     }
 
     .pagination a {
-        margin: 0 5px;
-        padding: 10px 15px;
+        margin: 0 8px;
+        padding: 12px 20px;
         background-color: #FF6600;
         color: white;
         text-decoration: none;
-        border-radius: 5px;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
     }
 
     .pagination a:hover {
         background-color: #FF4500;
     }
 
+    /* Footer styling */
     footer {
         background-color: #FF6600;
         color: white;
         text-align: center;
-        padding: 10px;
-        margin-top: 20px;
+        padding: 30px;
+        margin-top: 40px;
+        border-radius: 8px;
     }
 </style>
 
@@ -187,11 +224,8 @@
     <div class="article-section">
         <h2>Sejarah Kuliner Jogja</h2>
         <p>Kuliner Yogyakarta memiliki akar budaya yang sangat dalam, mulai dari makanan tradisional Keraton hingga jajanan pasar yang tetap lestari hingga kini.</p>
-        <a href="#" class="inline-flex items-center font-medium text-green-600 hover:text-green-800 dark:text-green-500 dark:hover:text-green-700">
-            Selengkapnya 
-            <svg class="w-2.5 h-2.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-            </svg>
+        <a href="#" class="btn-read-more">
+            Selengkapnya
         </a>
     </div>
 
