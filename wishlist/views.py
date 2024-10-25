@@ -22,8 +22,9 @@ def add_to_wishlist(request, food_id):
     messages.success(request, f'{food.name} has been added to your wishlist!')
     return redirect('wishlist:view_wishlist')
 
+@login_required
 def view_wishlist(request):
-    wishlist = Wishlist.objects.get(user=request.user)  
+    wishlist = Wishlist.objects.get_or_create(user=request.user)  
     context = {'wishlist': wishlist}
     return render(request, 'wishlist.html', context)
 
