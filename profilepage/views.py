@@ -24,6 +24,7 @@ def show_profile(request):
         'profile_form': ProfileUpdateForm(instance=profile),
         'wishlist_items': wishlist_items,
         'reviews': reviews,
+        'last_login': request.COOKIES['last_login'],
     }
     return render(request, 'profile.html', context)
 
