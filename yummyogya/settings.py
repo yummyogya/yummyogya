@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'dashboard',
     'wishlist',
     'profilepage',
-    'details'
+    'details',
+    'article'
 ]
 
 MIDDLEWARE = [
