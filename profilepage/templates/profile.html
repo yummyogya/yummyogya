@@ -20,7 +20,11 @@
             {% if user.profile.profile_photo %}
                 <img src="{{ user.profile.profile_photo.url }}" alt="Foto Profil" class="w-16 h-16 rounded-full">
             {% else %}
-                <div class="w-16 h-16 rounded-full bg-gray-200"></div>
+                <div class="relative w-16 h-16 overflow-hidden bg-gray-600 rounded-full">
+                    <svg class="absolute w-20 h-20 text-gray-300 -left-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
             {% endif %}
             <div>
                 <h2 class="text-2xl font-semibold">{{ user.username }}</h2>
@@ -36,41 +40,25 @@
 
     <!-- Form Edit Profile AJAX-->
     <div id="edit-profile-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white rounded shadow-lg p-6 w-full max-w-3xl"> <!-- Adjusted the width here -->
+        <div class="bg-white rounded shadow-lg p-6 w-full max-w-3xl">
             <h2 class="text-2xl mb-4">Edit Profile</h2>
+            
             <!-- Error Handling Block -->
-            {% if profile_form.errors or password_form.errors %}
-                <ul class="text-red-500 mb-4">
-                    {% for field, errors in profile_form.errors.items %}
-                        <li>{{ field }}: {{ errors|join:", " }}</li>
-                    {% endfor %}
-                    {% for field, errors in password_form.errors.items %}
-                        <li>{{ field }}: {{ errors|join:", " }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+            <div id="error-messages" class="text-red-500 mb-4 hidden"></div>
             
             <form id="edit-profile-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="mb-4">
                     <label for="profile_photo" class="block font-semibold mb-2">Foto Profil</label>
-                    <input type="file" name="profile_photo" id="profile_photo" class="border border-gray-300 rounded px-4 py-2 w-full"> <!-- Added border and styling -->
+                    <input type="file" name="profile_photo" id="profile_photo" class="border border-gray-300 rounded px-4 py-2 w-full">
+                </div>
+                <div class="mb-4">
+                    <input type="checkbox" id="delete_photo" name="delete_photo">
+                    <label for="delete_photo" class="font-semibold">Hapus Foto Profil</label>
                 </div>
                 <div class="mb-4">
                     <label for="bio" class="block font-semibold mb-2">Bio</label>
-                    <textarea name="bio" id="bio" rows="3" class="border border-gray-300 rounded px-4 py-2 w-full"></textarea> <!-- Added border and styling -->
-                </div>
-                <div class="mb-4">
-                    <label for="old_password" class="block font-semibold mb-2">Password Lama</label>
-                    <input type="password" name="old_password" id="old_password" class="border border-gray-300 rounded px-4 py-2 w-full"> <!-- Added border and styling -->
-                </div>
-                <div class="mb-4">
-                    <label for="new_password1" class="block font-semibold mb-2">Password Baru</label>
-                    <input type="password" name="new_password1" id="new_password1" class="border border-gray-300 rounded px-4 py-2 w-full"> <!-- Added border and styling -->
-                </div>
-                <div class="mb-4">
-                    <label for="new_password2" class="block font-semibold mb-2">Konfirmasi Password Baru</label>
-                    <input type="password" name="new_password2" id="new_password2" class="border border-gray-300 rounded px-4 py-2 w-full"> <!-- Added border and styling -->
+                    <textarea name="bio" id="bio" rows="3" class="border border-gray-300 rounded px-4 py-2 w-full"></textarea>
                 </div>
                 <button type="submit" class="bg-orange-600 text-white px-4 py-2 rounded">Simpan Perubahan</button>
                 <button type="button" id="close-modal" class="bg-gray-300 text-gray-800 px-4 py-2 rounded">Batal</button>
@@ -123,11 +111,32 @@
     document.getElementById('close-modal').addEventListener('click', function() {
         document.getElementById('edit-profile-modal').classList.add('hidden');
     });
+
+    // Mencegah unggah file bersamaan dengan opsi hapus foto profil
+    document.getElementById('profile_photo').addEventListener('change', function() {
+        const deletePhotoCheckbox = document.getElementById('delete_photo');
+        if (this.files.length > 0) {
+            deletePhotoCheckbox.checked = false;
+            deletePhotoCheckbox.disabled = true;
+        } else {
+            deletePhotoCheckbox.disabled = false;
+        }
+    });
+
+    document.getElementById('delete_photo').addEventListener('change', function() {
+        const profilePhotoInput = document.getElementById('profile_photo');
+        if (this.checked) {
+            profilePhotoInput.value = "";
+            profilePhotoInput.disabled = true;
+        } else {
+            profilePhotoInput.disabled = false;
+        }
+    });
     
     document.getElementById('edit-profile-form').addEventListener('submit', function(event) {
         event.preventDefault();
         let formData = new FormData(this);
-        fetch("{% url 'profilepage:show_profile' %}", {
+        fetch("{% url 'profilepage:update_profile' %}", {
             method: "POST",
             body: formData,
             headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -137,10 +146,15 @@
             if (data.success) {
                 location.reload();  // Refresh page on success
             } else {
-                console.error(data.errors);  // Display errors if needed
+                const errorMessages = document.getElementById('error-messages');
+                errorMessages.innerHTML = '';
+                for (const [field, messages] of Object.entries(data.errors)) {
+                    errorMessages.innerHTML += `<p>${field}: ${messages.join(', ')}</p>`;
+                }
+                errorMessages.classList.remove('hidden');
             }
         });
     });
-    </script>
+</script>
 
 {% endblock content %}
