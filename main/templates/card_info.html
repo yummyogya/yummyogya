@@ -7,11 +7,9 @@
         <!-- Tombol Wishlist -->
         <button 
             onclick="addToWishlist('{{ item.id }}')"
-            class="relative flex w-8 h-8 justify-center items-center bg-white text-white hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-white dark:hover:bg-gray-600 dark:focus:ring-green-800">
-            <svg fill="#000000" version="1.1" class="absolute w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path d="M294.957,478.609c-27.619,0-50.087-22.468-50.087-50.087c0-9.223-7.479-16.696-16.696-16.696H16.696
-                C7.479,411.826,0,419.299,0,428.522C0,474.554,37.446,512,83.478,512h211.478c9.217,0,16.696-7.473,16.696-16.696
-                C311.652,486.082,304.174,478.609,294.957,478.609z"/>
+            class="relative flex w-8 h-8 justify-center items-center bg-white text-orange-500 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm text-center dark:bg-white dark:hover:bg-gray-300 dark:focus:ring-orange-800">
+            <svg id="heart-icon-{{ item.id }}" fill="#FFA500" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
             </svg>
         </button>
 
