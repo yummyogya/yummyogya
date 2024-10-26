@@ -42,13 +42,13 @@ def food_detail(request, item_id):
     # Struktur konteks yang mendukung kedua model
     item_context = {
         'id': item.id,
-        'nama': getattr(item, 'nama', item.name),
-        'deskripsi': getattr(item, 'deskripsi', item.description),
-        'harga': getattr(item, 'harga', item.price),
+        'nama': item.nama if isinstance(item, Makanan) else item.name,  # Perbaiki nama atribut
+        'deskripsi': item.deskripsi if isinstance(item, Makanan) else item.description,
+        'harga': item.harga if isinstance(item, Makanan) else item.price,
         'rating': item.rating,
-        'gambar': getattr(item, 'gambar', item.image_url),
-        'restoran': getattr(item, 'restoran', item.restaurant)
+        'gambar': item.gambar if isinstance(item, Makanan) else item.image_url,
+        'restoran': item.restoran if isinstance(item, Makanan) else item.restaurant,
     }
 
-    return render(request, 'details/food_detail.html', {'item': item_context})
+    return render(request,'food_detail.html', {'item': item_context})
 
