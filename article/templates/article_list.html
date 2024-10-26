@@ -4,28 +4,25 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-{# Pastikan CSS ter-load #}
-<link rel="stylesheet" type="text/css" href="{% static 'styles/article_list.css' %}">
-
-<div class="container">
-    <h1>Artikel Kuliner Yogyakarta</h1>
-    <div class="article-list">
+<div class="container mx-auto p-5">
+    <h1 class="text-3xl font-bold mb-5">Artikel Kuliner Yogyakarta</h1>
+    <div class="article-list space-y-5">
         {% for article in articles %}
-            <article class="article-item">
-                <div class="article-content">
-                    {% if article.image %}
-                        <img src="{% static 'images/default-culinary.jpg' %}" alt="{{ article.title }}" class="article-image">
-                    {% endif %}
-                    <div class="article-text">
-                        <h2>{{ article.title }}</h2>
-                        <p class="publication-date">Diterbitkan pada {{ article.publication_date }}</p>
-                        <p class="content-preview">{{ article.content|truncatewords:30 }}</p>
-                        <a href="{% url 'main:article_detail' article.id %}" class="read-more">Baca Selengkapnya</a>
-                    </div>
+            <article class="article-item flex items-center gap-5 p-5 border border-gray-300 rounded-lg shadow-md">
+                <div class="article-text flex-1">
+                    <h2 class="text-2xl font-semibold">{{ article.title }}</h2>
+                    <p class="publication-date text-sm text-gray-500">Diterbitkan pada {{ article.publication_date }}</p>
+                    <p class="content-preview text-base text-gray-700">{{ article.content|truncatewords:30 }}</p>
+                    <a href="{% url 'main:article_detail' article.id %}" class="read-more text-blue-600 font-bold">Baca Selengkapnya</a>
                 </div>
+                {% if article.image %}
+                    <img src="{{ article.image.url }}" alt="{{ article.title }}" class="article-image w-32 h-auto rounded-lg object-cover">
+                {% else %}
+                    <img src="{% static 'images/default-culinary.jpg' %}" alt="{{ article.title }}" class="article-image w-64 h-auto rounded-lg object-cover">
+                {% endif %}
             </article>
         {% empty %}
-            <p class="no-articles">Tidak ada artikel yang ditemukan.</p>
+            <p class="no-articles text-center text-lg text-gray-600">Tidak ada artikel yang ditemukan.</p>
         {% endfor %}
     </div>
 </div>

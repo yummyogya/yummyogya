@@ -5,9 +5,9 @@ from django.shortcuts import render
 def article_list(request):
     # Daftar artikel dengan data disimpan dalam dictionary
     articles = [
-        {'id': 1, 'title': 'Sejarah Kuliner Jogja', 'content': 'Yogyakarta memiliki sejarah kuliner yang kaya...'},
-        {'id': 2, 'title': 'Makanan Tradisional Yogyakarta', 'content': 'Makanan tradisional seperti Gudeg...'},
-        {'id': 3, 'title': 'Kuliner Modern di Jogja', 'content': 'Selain makanan tradisional, Jogja juga menawarkan kuliner modern...'},
+        {'id': 1, 'title': 'Sejarah Kuliner Jogja', 'content': 'Yogyakarta memiliki sejarah kuliner yang kaya...', 'published_date': '2022-01-01 12:00:00'},
+        {'id': 2, 'title': 'Makanan Tradisional Yogyakarta', 'content': 'Makanan tradisional seperti Gudeg...', 'published_date': '2023-01-02 12:00:00'},
+        {'id': 3, 'title': 'Kuliner Modern di Jogja', 'content': 'Selain makanan tradisional, Jogja juga menawarkan kuliner modern...', 'published_date': '2024-01-03 12:00:00'},
     ]
     return render(request, 'article_list.html', {'articles': articles})
 
