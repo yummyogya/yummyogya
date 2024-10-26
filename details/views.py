@@ -7,6 +7,8 @@ from dashboard.models import Food
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
+from django.db import models
+
 
 @csrf_exempt
 def add_review(request):
@@ -25,6 +27,13 @@ def add_review(request):
                 review=review_text,
                 rating=rating
             )
+
+            # Hitung rata-rata rating
+            all_reviews = Review.objects.filter(food=food)
+            average_rating = all_reviews.aggregate(models.Avg('rating'))['rating__avg']
+            food.rating = average_rating  # Update rating di objek food
+            food.save()  # Simpan perubahan ke database
+            
             return JsonResponse({'message': 'Review added successfully!', 'status': 'success'})
         return JsonResponse({'message': 'Failed to add review', 'status': 'error'})
     return JsonResponse({'message': 'Invalid request method', 'status': 'error'})
