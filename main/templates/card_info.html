@@ -1,26 +1,23 @@
 <div class="card relative">
+    <!-- Gambar makanan -->
     <img src="{{ item.gambar }}" alt="{{ item.nama }}" class="object-cover w-full h-48">
 
     <!-- Tombol Add to Wishlist dan Detail -->
     <div class="absolute top-4 right-2 flex space-x-2">
-        <!-- Wishlist Button -->
+        <!-- Tombol Wishlist -->
         <button 
             onclick="addToWishlist('{{ item.id }}')"
             class="relative flex w-8 h-8 justify-center items-center bg-white text-white hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-white dark:hover:bg-gray-600 dark:focus:ring-green-800">
-            <svg fill="#000000" version="1.1" class="absolute w-6 h-6"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512">
-                <g>
-                    <path d="M294.957,478.609c-27.619,0-50.087-22.468-50.087-50.087c0-9.223-7.479-16.696-16.696-16.696H16.696
-                    C7.479,411.826,0,419.299,0,428.522C0,474.554,37.446,512,83.478,512h211.478c9.217,0,16.696-7.473,16.696-16.696
-                    C311.652,486.082,304.174,478.609,294.957,478.609z"/>
-                </g>
+            <svg fill="#000000" version="1.1" class="absolute w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M294.957,478.609c-27.619,0-50.087-22.468-50.087-50.087c0-9.223-7.479-16.696-16.696-16.696H16.696
+                C7.479,411.826,0,419.299,0,428.522C0,474.554,37.446,512,83.478,512h211.478c9.217,0,16.696-7.473,16.696-16.696
+                C311.652,486.082,304.174,478.609,294.957,478.609z"/>
             </svg>
         </button>
 
-        <!-- Detail Button -->
+        <!-- Tombol Detail -->
         <button 
-            onclick="showDetails({{ item.id }})"
+            onclick="showDetails('{{ item.id }}')"
             class="relative flex w-8 h-8 justify-center items-center bg-white text-white hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-white dark:hover:bg-gray-600 dark:focus:ring-blue-800">
             <svg fill="#000000" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
@@ -28,6 +25,7 @@
         </button>
     </div>
 
+    <!-- Konten Card -->
     <div class="card-body p-4">
         <h3 class="text-lg font-semibold">{{ item.nama }}</h3>
         <p class="price font-bold mt-2">Harga: Rp {{ item.harga }}</p>
@@ -35,16 +33,16 @@
         <p>Rating: {{ item.rating }} / 5</p>
     </div>
 
-    <!-- Modal Template -->
-    <div id="details-modal-{{ item.id }}" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+    <!-- Modal Detail -->
+    <div id="details-modal-{{ item.id }}" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
+            <button onclick="hideDetails('{{ item.id }}')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl font-bold">×</button>
             <h2 class="text-2xl font-bold mb-4">{{ item.nama }}</h2>
             <img src="{{ item.gambar }}" alt="{{ item.nama }}" class="w-full h-48 object-cover mb-4">
             <p class="mb-4">{{ item.deskripsi }}</p>
             <p class="font-bold">Harga: Rp {{ item.harga }}</p>
             <p>Restoran: {{ item.restoran }}</p>
             <p>Rating: {{ item.rating }} / 5</p>
-            <button onclick="hideDetails({{ item.id }})" class="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Close</button>
         </div>
     </div>
 </div>
@@ -62,7 +60,7 @@ function addToWishlist(foodId) {
     fetch(`/wishlist/add/${foodId}/`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': getCsrfToken(),  // Ambil CSRF token di sini
+            'X-CSRFToken': getCsrfToken(),
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ food_id: foodId })
@@ -96,8 +94,10 @@ function showDetails(id) {
 function hideDetails(id) {
     document.getElementById(`details-modal-${id}`).classList.add('hidden');
 }
-
-function closeModal() {
-    document.getElementById("detailModal").classList.add("hidden");
-}
 </script>
+
+<style>
+.modal {
+    display: none;
+}
+</style>
