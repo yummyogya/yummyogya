@@ -3,13 +3,13 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-<div style="max-width: 950px; margin: 40px auto 200px auto; padding-top: 100px;">
+<div style="max-width: 950px; margin: 40px auto 60px auto; padding-top: 60px;">
 
     <!-- Informasi Pengguna -->
     <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
         <div class="flex items-center space-x-4">
             {% if user.profile.profile_photo %}
-                <img src="{{ user.profile.profile_photo.url }}" alt="Foto Profil" class="w-16 h-16 rounded-full">
+                <img src="{{ user.profile.profile_photo.url }}" alt="Foto Profil" class="w-16 h-16 rounded-full border-2 border-black">
             {% else %}
                 <div class="relative w-16 h-16 overflow-hidden bg-gray-600 rounded-full">
                     <svg class="absolute w-20 h-20 text-gray-300 -left-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -18,7 +18,7 @@
                 </div>
             {% endif %}
             <div>
-                <h2 class="text-2xl font-semibold">{{ user.username }}</h2>
+                <h2 class="text-2xl font-semibold  text-orange-500 bg-orange-200 px-3 py-1 rounded-md inline-block">{{ user.username }}</h2>
                 <p class="text-sm text-gray-600">Bergabung sejak: {{ user.date_joined|date:"d M Y" }}</p>
                 <p class="text-sm text-gray-600">Terakhir login: {{ last_login }}</p>
             </div>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="bio" class="block font-semibold mb-2">Bio</label>
-                    <textarea name="bio" id="bio" rows="3" class="border border-gray-300 rounded px-4 py-2 w-full"></textarea>
+                    <textarea name="bio" id="bio" rows="3" class="border border-gray-300 rounded px-4 py-2 w-full">{{ user.profile.bio }}</textarea>
                 </div>
                 <button type="submit" class="bg-orange-600 text-white px-4 py-2 rounded">Simpan Perubahan</button>
                 <button type="button" id="close-modal" class="bg-gray-300 text-gray-800 px-4 py-2 rounded">Batal</button>
@@ -88,50 +88,68 @@
 
 
     <!-- Wishlist -->
-    <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
-        <h3 class="text-xl font-semibold mb-4">Wishlist</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
-            {% if wishlist_items %}
-                {% for item in wishlist_items %}
-                    <div style="background-color: #ffffffe6; border: 1px solid #ddddddb3; border-radius: 16px; box-shadow: 0 4px 12px #0000001a; padding-bottom: 10px; overflow: hidden;">
-                        <img src="{{ item.gambar }}" alt="{{ item.nama }}" style="width: 100%; height: 200px; object-fit: cover; border-top-left-radius: 16px; border-top-right-radius: 16px;">
-                        <div style="padding: 15px; text-align: center;">
-                            <h5 style="font-weight: 600; color: #FF6600; font-size: 1.2rem;">{{ item.nama }}</h5>
-                            <p style="font-size: 1rem; color: #555; margin-bottom: 5px;">Harga: Rp {{ item.harga }}</p>
-                            <p style="font-size: 1rem; color: #555; margin-bottom: 5px;">{{ item.deskripsi|truncatewords:7 }}</p>
-                            <p style="font-size: 1rem; color: #FFA500; margin-bottom: 5px;">Rating: {{ item.rating }} / 5</p>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-gray-600">Belum ada item di wishlist.</p>
-            {% endif %}
+    <div class="bg-white rounded-lg shadow-lg mb-6">
+        <!-- Title with orange background at the top -->
+        <div class="bg-orange-600 text-white rounded-t-lg py-3 px-4 mb-4">
+            <h3 class="text-xl font-semibold">Wishlist</h3>
         </div>
-        <a href="{% url 'wishlist:view_wishlist' %}" class="mt-4 inline-block text-orange-600 font-semibold">Lihat seluruh wishlist</a>
+        
+        <!-- Wishlist Content -->
+        <div style="padding: 15px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                {% if wishlist_items %}
+                    {% for item in wishlist_items %}
+                        <div style="background-color: #ffffffe6; border: 1px solid #ddddddb3; border-radius: 16px; box-shadow: 0 4px 12px #0000001a; padding-bottom: 10px; overflow: hidden;"
+                            onmouseover="this.style.backgroundColor='#fff7e6';"
+                            onmouseout="this.style.backgroundColor='#ffffffe6';">
+                            <img src="{{ item.gambar }}" alt="{{ item.nama }}" style="width: 100%; height: 200px; object-fit: cover; border-top-left-radius: 16px; border-top-right-radius: 16px;">
+                            <div style="padding: 15px; text-align: center;">
+                                <a href="{% url 'details:food_detail' item.id %}" class="font-semibold text-orange-600 text-lg no-underline hover:underline">{{ item.nama }}</a>
+                                <p style="font-size: 1rem; color: #555; margin-bottom: 5px;">Harga: Rp {{ item.harga }}</p>
+                                <p style="font-size: 1rem; color: #555; margin-bottom: 5px;">{{ item.deskripsi|truncatewords:7 }}</p>
+                                <p style="font-size: 1rem; color: #FFA500; margin-bottom: 5px;">Rating: {{ item.rating }} / 5</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-gray-600">Belum ada item di wishlist.</p>
+                {% endif %}
+            </div>
+            <a href="{% url 'wishlist:view_wishlist' %}" class="mt-6 inline-block text-orange-600 font-semibold">Lihat seluruh wishlist</a>
+        </div>
     </div>
 
     <!-- Riwayat Ulasan -->
-    <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
-        <h3 class="text-xl font-semibold mb-4">Riwayat Ulasan</h3>
-        {% if reviews %}
-            <ul>
-                {% for review in reviews %}
-                    <li class="mb-4">
-                        <a href="{% url 'details:food_detail' review.food.id %}" class="text-orange-600 font-semibold">
-                            {% if review.food %}
-                                {{ review.food.nama }}
-                            {% else %}
-                                {{ review.food_alt.name }}
-                            {% endif %}
-                        </a>
-                        <p class="text-sm text-gray-600">Rating: {{ review.rating }}/5</p>
-                        <p class="text-gray-800">{{ review.review }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="text-gray-600">Belum pernah membuat ulasan.</p>
-        {% endif %}
+    <div class="bg-white rounded-lg shadow-lg mb-6">
+        <!-- Title with orange background at the top -->
+        <div class="bg-orange-600 text-white rounded-t-lg py-3 px-4 mb-2">
+            <h3 class="text-xl font-semibold">Riwayat Ulasan</h3>
+        </div>
+        
+        <!-- Riwayat Ulasan Content -->
+        <div style="padding: 15px;">
+            {% if reviews %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                    {% for review in reviews %}
+                        <div style="padding: 15px; background-color: #f9f9f9; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #FF6600;"
+                            onmouseover="this.style.backgroundColor='#fff7e6';"
+                            onmouseout="this.style.backgroundColor='#f9f9f9';">
+                       <a href="{% url 'details:food_detail' review.food.id %}" class="text-orange-600 font-semibold hover:underline">
+                                {% if review.food %}
+                                    {{ review.food.nama }}
+                                {% else %}
+                                    {{ review.food_alt.name }}
+                                {% endif %}
+                            </a>
+                            <p class="text-sm text-gray-600">Rating: {{ review.rating }}/5</p>
+                            <p class="text-gray-800">{{ review.review|truncatewords:4 }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-600">Belum pernah membuat ulasan.</p>
+            {% endif %}
+        </div>
     </div>
 </div>
 

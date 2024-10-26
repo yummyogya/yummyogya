@@ -38,7 +38,7 @@ def update_profile(request):
 
         if profile_form.is_valid():
             new_bio = request.POST.get('bio')
-            if new_bio:
+            if new_bio.strip():
                 profile.bio = new_bio
             if delete_photo:
                 profile.profile_photo.delete()
