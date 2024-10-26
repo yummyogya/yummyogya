@@ -1,0 +1,87 @@
+<!-- yummyogya/main/templates/food_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item.nama }} - Detail Makanan</title>
+</head>
+<body>
+    <div class="detail-container">
+        <h1>{{ item.nama }}</h1>
+        <img src="{{ item.gambar }}" alt="{{ item.nama }}" style="width: 100%; max-width: 400px;">
+        <p>Deskripsi: {{ item.deskripsi }}</p>
+        <p>Harga: Rp {{ item.harga }}</p>
+        <p>Restoran: {{ item.restoran }}</p>
+        <p>Rating: {{ item.rating }} / 5</p>
+        
+        <!-- Form untuk menambahkan ulasan -->
+        <h2>Ulasan</h2>
+        <form id="review-form">
+            <textarea id="review" name="review" placeholder="Tulis ulasan di sini..." required></textarea>
+            <br>
+            <label for="rating">Rating:</label>
+            <select id="rating" name="rating" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <br>
+            <button type="button" onclick="submitReview({{ item.id }})">Kirim Ulasan</button>
+        </form>
+
+        <!-- Menampilkan Ulasan -->
+        <h3>Ulasan Pengguna:</h3>
+        <div class="reviews">
+            {% for review in item.review_set.all %}
+                <div class="review-item">
+                    <p><strong>{{ review.user.username }}</strong> rated: {{ review.rating }} / 5</p>
+                    <p>{{ review.review }}</p>
+                    <p class="text-gray-500">{{ review.created_at|date:"Y-m-d H:i" }}</p>
+                </div>
+            {% empty %}
+                <p>Tidak ada ulasan untuk makanan ini.</p>
+            {% endfor %}
+        </div>
+
+        <a href="{% url 'show_main' %}">Kembali ke Home</a>
+    </div>
+
+    <script>
+    function submitReview(foodId) {
+        const rating = document.getElementById('rating').value;
+        const reviewText = document.getElementById('review').value;
+        const csrfToken = getCsrfToken();
+
+        fetch('/details/add_review/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ rating: rating, review: reviewText, food_id: foodId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);
+                location.reload(); // Reload page to show the new review
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function getCsrfToken() {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrftoken'))
+            ?.split('=')[1];
+        return cookieValue;
+    }
+    </script>
+</body>
+</html>
