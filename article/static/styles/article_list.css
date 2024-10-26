@@ -2,7 +2,7 @@
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 80px 1.5rem 2rem; /* Tambahkan padding-top untuk memberi ruang di bawah navbar */
+    padding: 80px 1.5rem 2rem;
 }
 
 .container h1 {
@@ -11,7 +11,7 @@
     margin: 2rem 0;
     font-size: 2.5rem;
     font-weight: bold;
-    padding-top: 1rem; /* Tambahan padding untuk judul */
+    padding-top: 1rem;
 }
 
 .article-list {
@@ -24,18 +24,45 @@
 .article-item {
     background: white;
     border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: transform 0.3s ease;
-    border: 1px solid #eee;
+}
+
+.article-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .article-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 1.5rem;
+    gap: 2rem;
 }
 
 .article-text {
-    padding: 1rem 0;
+    flex: 1;
+    min-width: 0; /* Prevents text from overflowing */
+}
+
+.article-image-container {
+    flex: 0 0 300px; /* Fixed width for image container */
+    height: 200px; /* Fixed height */
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.article-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.article-item:hover .article-image {
+    transform: scale(1.05);
 }
 
 .article-item h2 {
@@ -71,23 +98,33 @@
     background-color: #F57C00;
 }
 
-.no-articles {
-    text-align: center;
-    color: #666;
-    font-style: italic;
-    padding: 2rem;
+/* Responsive design */
+@media (max-width: 900px) {
+    .article-content {
+        flex-direction: column;
+    }
+    
+    .article-image-container {
+        flex: 0 0 200px;
+        width: 100%;
+        order: -1; /* Moves image to top on mobile */
+    }
+    
+    .article-text {
+        padding: 1rem 0;
+    }
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 0 1rem;
+        padding-top: 70px;
     }
     
     .container h1 {
         font-size: 2rem;
     }
     
-    .article-content {
-        padding: 1rem;
+    .article-image-container {
+        height: 180px;
     }
 }
