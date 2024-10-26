@@ -29,12 +29,12 @@ def add_review(request):
         return JsonResponse({'message': 'Failed to add review', 'status': 'error'})
     return JsonResponse({'message': 'Invalid request method', 'status': 'error'})
 
-def food_detail(request, item_id):
+def food_detail(request, food_id):
     # Coba dapatkan item dari model Makanan terlebih dahulu
-    item = Makanan.objects.filter(pk=item_id).first()
+    item = Makanan.objects.filter(pk=food_id).first()
     if not item:
         # Jika tidak ada di Makanan, coba cari di model Food
-        item = Food.objects.filter(pk=item_id).first()
+        item = Food.objects.filter(pk=food_id).first()
         if not item:
             # Jika tidak ada di kedua model, kembalikan halaman 404
             return render(request, '404.html')  # Pastikan '404.html' ada di templates folder
