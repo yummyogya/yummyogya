@@ -2,175 +2,81 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ item.nama }} - Detail Makanan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        .detail-container {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #FF6600;
-            font-size: 2em;
-        }
-        img {
-            border-radius: 8px;
-            margin: 10px 0;
-        }
-        p {
-            color: #666;
-            line-height: 1.6;
-        }
-        h2, h3 {
-            color: #FF6600;
-            margin-top: 1.5em;
-            margin-bottom: 0.5em;
-        }
-        #review-form {
-            margin-top: 15px;
-        }
-        #review {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            resize: vertical;
-        }
-        #rating {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #FF6600;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #e55a00;
-        }
-        .reviews {
-            margin-top: 20px;
-        }
-        .review-item {
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid #FF6600;
-        }
-        .text-gray-500 {
-            color: #666;
-            font-size: 0.85em;
-        }
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            color: #FF6600;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        a:hover {
-            color: #e55a00;
-        }
-    </style>
-</head>
-<body>
-    <div class="detail-container">
-        <h1>{{ item.nama }}</h1>
-        <img src="{{ item.gambar }}" alt="{{ item.nama }}" style="width: 100%; max-width: 400px;">
-        <p>Deskripsi: {{ item.deskripsi }}</p>
-        <p>Harga: Rp {{ item.harga }}</p>
-        <p>Restoran: {{ item.restoran }}</p>
-        <p>Rating: {{ item.rating }} / 5</p>
-        
-        <!-- Form untuk menambahkan ulasan -->
-        <h2>Ulasan</h2>
-        <form id="review-form">
-            <textarea id="review" name="review" placeholder="Tulis ulasan di sini..." required></textarea>
-            <br>
-            <label for="rating">Rating:</label>
-            <select id="rating" name="rating" required>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-            <br>
-            <button type="button" onclick="submitReview({{ item.id }})">Kirim Ulasan</button>
-        </form>
+<div class="detail-container" style="max-width: 700px; margin: 80px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <h1 style="color: #FF6600; font-size: 2em;">{{ item.nama }}</h1>
+    <img src="{{ item.gambar }}" alt="{{ item.nama }}" style="width: 100%; max-width: 400px; border-radius: 8px; margin: 10px 0;">
+    <p>Deskripsi: {{ item.deskripsi }}</p>
+    <p>Harga: Rp {{ item.harga }}</p>
+    <p>Restoran: {{ item.restoran }}</p>
+    <p>Rating: {{ item.rating }} / 5</p>
+    
+    <!-- Form untuk menambahkan ulasan -->
+    <h2 style="color: #FF6600; margin-top: 1.5em; margin-bottom: 0.5em;">Ulasan</h2>
+    <form id="review-form" style="margin-top: 15px;">
+        <textarea id="review" name="review" placeholder="Tulis ulasan di sini..." required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 10px; resize: vertical;"></textarea>
+        <br>
+        <label for="rating">Rating:</label>
+        <select id="rating" name="rating" required style="padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <br>
+        <button type="button" onclick="submitReview({{ item.id }})" style="background-color: #FF6600; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; transition: background-color 0.3s;">Kirim Ulasan</button>
+    </form>
 
-        <!-- Menampilkan Ulasan -->
-        <h3>Ulasan Pengguna:</h3>
-        <div class="reviews">
-            {% for review in item.review_set.all %}
-                <div class="review-item">
-                    <p><strong>{{ review.user.username }}</strong> rated: {{ review.rating }} / 5</p>
-                    <p>{{ review.review }}</p>
-                    <p class="text-gray-500">{{ review.created_at|date:"Y-m-d H:i" }}</p>
-                </div>
-            {% empty %}
-                <p>Tidak ada ulasan untuk makanan ini.</p>
-            {% endfor %}
-        </div>
-
-        <a href="{% url 'main:show_main' %}">Kembali ke Home</a>
+    <!-- Menampilkan Ulasan -->
+    <h3 style="color: #FF6600; margin-top: 1.5em;">Ulasan Pengguna:</h3>
+    <div class="reviews" style="margin-top: 20px;">
+        {% for review in item.review_set.all %}
+            <div class="review-item" style="padding: 15px; background-color: #f9f9f9; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #FF6600;">
+                <p><strong>{{ review.user.username }}</strong> rated: {{ review.rating }} / 5</p>
+                <p>{{ review.review }}</p>
+                <p class="text-gray-500" style="color: #666; font-size: 0.85em;">{{ review.created_at|date:"Y-m-d H:i" }}</p>
+            </div>
+        {% empty %}
+            <p>Tidak ada ulasan untuk makanan ini.</p>
+        {% endfor %}
     </div>
 
-    <script>
-    function submitReview(foodId) {
-        const rating = document.getElementById('rating').value;
-        const reviewText = document.getElementById('review').value;
-        const csrfToken = getCsrfToken();
+    <a href="{% url 'main:show_main' %}" style="display: inline-block; margin-top: 20px; color: #FF6600; text-decoration: none; font-weight: bold;">Kembali ke Home</a>
+</div>
 
-        fetch('/details/add_review/', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ rating: rating, review: reviewText, food_id: foodId })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert(data.message);
-                location.reload(); // Reload page to show the new review
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
+<script>
+function submitReview(foodId) {
+    const rating = document.getElementById('rating').value;
+    const reviewText = document.getElementById('review').value;
+    const csrfToken = getCsrfToken();
 
-    function getCsrfToken() {
-        const cookieValue = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('csrftoken'))
-            ?.split('=')[1];
-        return cookieValue;
-    }
-    </script>
-</body>
-</html>
+    fetch('/details/add_review/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ rating: rating, review: reviewText, food_id: foodId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            location.reload(); // Reload page to show the new review
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function getCsrfToken() {
+    const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrftoken'))
+        ?.split('=')[1];
+    return cookieValue;
+}
+</script>
 
 {% endblock content %}
