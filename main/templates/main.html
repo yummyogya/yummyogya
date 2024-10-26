@@ -297,6 +297,10 @@
     </div>
 </div>
 
+<div class="pagination">
+    <!-- Pagination buttons will be dynamically inserted here -->
+</div>
+
 <footer>
     <p>&copy; 2024 Yummyogya. Semua hak dilindungi undang-undang.</p>
 </footer>
@@ -304,14 +308,12 @@
 
 
 <script>
-    // Function to get the CSRF token from the cookie
     function getCSRFToken() {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
             const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
-                // Django's CSRF cookie is named 'csrftoken'
                 if (cookie.substring(0, 10) === 'csrftoken=') {
                     cookieValue = decodeURIComponent(cookie.substring(10));
                     break;
@@ -322,98 +324,15 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        const searchButton = document.getElementById("search-button");
-
-        searchButton.addEventListener("click", function() {
-            loadPage(1);  // Get CSRF token
-
-            // AJAX request
-            fetch(`/search-ajax/?q=${query}`, {
-                method: 'GET',
-                headers: {
-                    'X-CSRFToken': csrftoken,  // Include CSRF token in the headers
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                const searchResults = document.getElementById("search-results");
-                searchResults.innerHTML = '';  // Bersihkan hasil sebelumnya
-
-                if (data.makanan_list.length > 0) {
-                    data.makanan_list.forEach(item => {
-                        const cardHtml = `
-                            <div id="search-results" class="cards">
-                                <div class="card">
-                                    <img src="${item.gambar}" alt="${item.nama}" class="object-cover w-full h-48">
-
-                                    <!-- Tombol Add to Wishlist dan Detail -->
-                                    <div class="absolute top-4 right-2 flex space-x-2">
-                                        <!-- Wishlist Button -->
-                                        <button 
-                                            onclick="addToWishlist(${item.id})"
-                                            class="relative flex w-8 h-8 justify-center items-center bg-white text-white hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-white dark:hover:bg-gray-600 dark:focus:ring-green-800">
-                                            <svg fill="#000000" version="1.1" class="absolute w-6 h-6"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 512 512">
-                                                <g>
-                                                    <path d="M294.957,478.609c-27.619,0-50.087-22.468-50.087-50.087c0-9.223-7.479-16.696-16.696-16.696H16.696
-                                                    C7.479,411.826,0,419.299,0,428.522C0,474.554,37.446,512,83.478,512h211.478c9.217,0,16.696-7.473,16.696-16.696
-                                                    C311.652,486.082,304.174,478.609,294.957,478.609z"/>
-                                                </g>
-                                            </svg>
-                                        </button>
-
-                                        <!-- Detail Button -->
-                                        <button onclick="showDetails(${item.id})"
-                                            class="relative flex w-8 h-8 justify-center items-center bg-white text-white hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-white dark:hover:bg-gray-600 dark:focus:ring-blue-800">
-                                            <svg fill="#000000" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                                            </svg>
-                                        </button>
-                                    </div>
-
-                                    <!-- Card Body -->
-                                    <div class="card-body p-4">
-                                        <h3 class="text-lg font-semibold">${item.nama}</h3>
-                                        <p class="price font-bold mt-2">Harga: Rp ${item.harga}</p>
-                                        <p class="restoran">Restoran: ${item.restoran}</p>
-                                        <p>Rating: ${item.rating} / 5</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Modal Template for Details -->
-                            <div id="details-modal-${item.id}" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                                <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-                                    <h2 class="text-2xl font-bold mb-4">${item.nama}</h2>
-                                    <img src="${item.gambar}" alt="${item.nama}" class="w-full h-48 object-cover mb-4">
-                                    <p class="mb-4">${item.deskripsi}</p>
-                                    <p class="font-bold">Harga: Rp ${item.harga}</p>
-                                    <p>Restoran: ${item.restoran}</p>
-                                    <p>Rating: ${item.rating} / 5</p>
-                                    <button onclick="hideDetails(${item.id})" class="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Close</button>
-                                </div>
-                            </div>
-                        `;
-
-                        searchResults.insertAdjacentHTML('beforeend', cardHtml);
-                    });
-                } else {
-                    searchResults.innerHTML = '<p>Tidak ada hasil ditemukan.</p>';
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching search results:", error);
-                searchResults.innerHTML = '<p>Terjadi kesalahan saat mencari.</p>';
-            });
+        document.getElementById("search-button").addEventListener("click", function() {
+            loadPage(1);  // Initialize search from page 1
         });
     });
 
     function loadPage(pageNumber) {
         const query = document.getElementById("search-query").value;
-        const csrftoken = getCSRFToken();  // Get CSRF token
+        const csrftoken = getCSRFToken();
 
-        // AJAX request for pagination
         fetch(`/search-ajax/?q=${query}&page=${pageNumber}`, {
             method: 'GET',
             headers: {
@@ -422,22 +341,20 @@
         })
         .then(response => response.json())
         .then(data => {
-            const searchResults = document.getElementById("search-results");
+            const searchResults = document.querySelector("#search-results .cards");
             searchResults.innerHTML = '';  // Clear previous results
 
             // Display search results
             if (data.makanan_list.length > 0) {
                 data.makanan_list.forEach(item => {
                     const cardHtml = `
-                        <div id="search-results" class="cards">
-                            <div class="card">
-                                <img src="${item.gambar}" alt="${item.nama}" class="object-cover w-full h-48">
-                                <div class="card-body p-4">
-                                    <h3 class="text-lg font-semibold">${item.nama}</h3>
-                                    <p class="price font-bold mt-2">Harga: Rp ${item.harga}</p>
-                                    <p class="restoran">Restoran: ${item.restoran}</p>
-                                    <p>Rating: ${item.rating} / 5</p>
-                                </div>
+                        <div class="card">
+                            <img src="${item.gambar}" alt="${item.nama}" class="object-cover w-full h-48">
+                            <div class="card-body p-4">
+                                <h3 class="text-lg font-semibold">${item.nama}</h3>
+                                <p class="price font-bold mt-2">Harga: Rp ${item.harga}</p>
+                                <p class="restoran">Restoran: ${item.restoran}</p>
+                                <p>Rating: ${item.rating} / 5</p>
                             </div>
                         </div>
                     `;
@@ -450,25 +367,21 @@
 
                 if (data.previous_page) {
                     pagination.insertAdjacentHTML('beforeend', 
-                        `<a href="#" onclick="loadPage(${data.previous_page}); return false;" 
-                            class="pagination-btn">Previous</a>`);
+                        `<a href="#" onclick="loadPage(${data.previous_page}); return false;" class="pagination-btn">Previous</a>`);
                 }
                 if (data.next_page) {
                     pagination.insertAdjacentHTML('beforeend', 
-                        `<a href="#" onclick="loadPage(${data.next_page}); return false;" 
-                            class="pagination-btn">Next</a>`);
+                        `<a href="#" onclick="loadPage(${data.next_page}); return false;" class="pagination-btn">Next</a>`);
                 }
             } else {
-                searchResults.innerHTML = '<p>Tidak ada hasil ditemukan.</p>';
+                searchResults.innerHTML = '<p>No results found.</p>';
             }
         })
         .catch(error => {
             console.error("Error fetching pagination results:", error);
-            searchResults.innerHTML = '<p>Terjadi kesalahan saat memuat halaman.</p>';
+            searchResults.innerHTML = '<p>Error loading results.</p>';
         });
     }
-
-
 </script>
 
 {% endblock %}
