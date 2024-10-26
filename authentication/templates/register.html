@@ -14,13 +14,24 @@
     </div>
 </header>
 
-<div style="max-width: 700px; margin: 40px auto 176px auto;">
+<div style="max-width: 700px; margin: 21px auto 22px auto;">
     <!-- Form Section with Title and Description inside the box -->
-    <div style="background-color: #fff; padding: 40px; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 4px 16px #0000001a;">
+    <div style="background-color: #fff; padding: 35px; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 4px 16px #0000001a;">
         <!-- Title -->
-        <h1 style="font-size: 2.2em; font-weight: bold; margin-bottom: 10px;">Buat Akun Baru di Yummyogya</h1>
-        <p style="font-size: 1.1em; color: #666; margin-bottom: 30px;">Daftar dan nikmati kemudahan menemukan kuliner khas Yogyakarta!</p>
+        <h1 style="font-size: 2.2em; font-weight: bold; text-align: center; margin-bottom: 10px;">Buat Akun Baru di Yummyogya</h1>
+        <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">Daftar dan nikmati kemudahan menemukan kuliner khas Yogyakarta!</p>
 
+        <!-- Account Creation Guidelines -->
+        <div style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px;">
+            <h3 style="font-size: 1.1em; font-weight: bold; color: #333;">Ketentuan Pembuatan Akun:</h3>
+            <ul style="font-size: 0.9em; color: #666; list-style: disc; padding-left: 20px;">
+                <li>Username harus unik dan bisa mengandung huruf, angka, serta karakter @/./+/-/_.</li>
+                <li>Username harus memiliki panjang antara 1 hingga 150 karakter.</li>
+                <li>Password minimal 8 karakter, jika validasi password default Django diaktifkan.</li>
+                <li>Hindari menggunakan password yang hanya terdiri dari angka atau kata-kata umum.</li>
+            </ul>
+        </div>
+        
         <!-- Register Form -->
         <form method="POST" action="" style="display: flex; flex-direction: column;">
             {% csrf_token %}
@@ -53,7 +64,7 @@
         {% endif %}
 
         <!-- Link ke Login -->
-        <div style="margin-top: 20px; font-size: 14px; color: #666; text-align: center;">
+        <div style="margin-top: 5px; font-size: 14px; color: #666; text-align: center;">
             Sudah punya akun?
             <a href="{% url 'authentication:login' %}" style="font-weight: bold; color: #4CAF50; text-decoration: none;">Login di sini</a>
         </div>
