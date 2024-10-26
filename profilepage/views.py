@@ -18,13 +18,14 @@ def show_profile(request):
     wishlist_items = wishlist.food.all()[:3]
     reviews = Review.objects.filter(user=user).select_related('food', 'food_alt')
     profile, created = Profile.objects.get_or_create(user=user)  # Buat profil jika belum ada
+    last_login = request.COOKIES.get('last_login', 'Not available')
 
     context = {
         'user': user,
         'profile_form': ProfileUpdateForm(instance=profile),
         'wishlist_items': wishlist_items,
         'reviews': reviews,
-        'last_login': request.COOKIES['last_login'],
+        'last_login': last_login,
     }
     return render(request, 'profile.html', context)
 
@@ -36,7 +37,7 @@ def update_profile(request):
         delete_photo = request.POST.get('delete_photo', False)
 
         if profile_form.is_valid():
-            new_bio = profile_form.cleaned_data.get('bio')
+            new_bio = request.POST.get('bio')
             if new_bio:
                 profile.bio = new_bio
             if delete_photo:
