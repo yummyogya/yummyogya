@@ -86,7 +86,9 @@
         <form method="post" class="food-form" id="food-form">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn">Simpan</button>
+            <button type="submit" class="btn" >Simpan</button>
+          
+            
         </form>
         <a href="{% url 'dashboard:dashboard' %}" class="btn cancel">Batal</a>
     </div>
@@ -96,7 +98,7 @@
         $(document).ready(function() {
             $('#food-form').on('submit', function(event) {
                 event.preventDefault();  // Mencegah reload halaman
-
+    
                 // Ambil data dari form
                 var formData = $(this).serialize();
                 
@@ -106,10 +108,13 @@
                     data: formData,
                     success: function(response) {
                         if (response.status === 'success') {
-                            // Tampilkan pesan sukses dan reset form
+                            // Tampilkan pesan sukses
                             $('#success-message').text(response.message).fadeIn();
-                            $('#error-message').fadeOut();
-                            $('#food-form')[0].reset();  // Reset form
+    
+                            // Arahkan ke dashboard setelah 2 detik
+                            setTimeout(function() {
+                                window.location.href = "{% url 'dashboard:dashboard' %}";  // Ganti dengan URL dashboard
+                            }, 1000); // Mengarahkan setelah 2 detik
                         }
                     },
                     error: function(xhr, status, error) {
@@ -121,5 +126,7 @@
             });
         });
     </script>
+    
+   
 </body>
 </html>

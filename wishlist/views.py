@@ -1,26 +1,19 @@
 from django.shortcuts import render, redirect
-from .models import Food, Wishlist
+from main.models import Makanan
+from .models import Wishlist
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 
 @login_required
 def add_to_wishlist(request, food_id):
-    food = Food.objects.filter(id=food_id).first()
-    
-    if food is None:
-        messages.error(request, "Food item not found.")
-        return redirect('wishlist:view_wishlist')
-
-    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-    wishlist.foods.add(food)
-    wishlist_count = wishlist.foods.count()
-    
-    if request.is_ajax():
-        return JsonResponse({'wishlist_count': wishlist_count}, status=200)
-    
-    messages.success(request, f'{food.name} has been added to your wishlist!')
-    return redirect('wishlist:view_wishlist')
+    if request.method == 'POST':
+        food_item = Makanan.objects.get(id=food_id)
+        wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+        wishlist.food.add(food_item)
+        wishlist_count = wishlist.food.count()
+        return JsonResponse({'wishlist_count': wishlist_count})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @login_required
 def view_wishlist(request):
@@ -30,7 +23,7 @@ def view_wishlist(request):
 
 @login_required
 def remove_from_wishlist(request, food_id):
-    food = Food.objects.filter(id=food_id).first()
+    food = Makanan.objects.filter(id=food_id).first()
     
     if food is None:
         messages.error(request, "Food item not found.")

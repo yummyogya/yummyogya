@@ -25,20 +25,20 @@ def add_food(request):
             food.created_by = request.user
             food.save()
             
+            
             # Cek apakah request berasal dari AJAX
-            # if request.is_ajax():
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-
                 return JsonResponse({
                     'status': 'success',
                     'food_name': food.name,
                     'message': 'Food added successfully!',
                 })
             return redirect('dashboard:dashboard')
+            
+            # Redirect ke dashboard setelah makanan ditambah
     else:
         form = FoodForm()
     
-    # Jika request bukan POST, tetap kembalikan form biasa
     return render(request, 'add_food.html', {'form': form})
 
 
