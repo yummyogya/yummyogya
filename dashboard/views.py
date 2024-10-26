@@ -8,11 +8,16 @@ from django.http import JsonResponse
 
 @login_required
 def dashboard(request):
-    if request.user.is_authenticated:
-        foods = Food.objects.filter(created_by=request.user)  # Ambil makanan yang dibuat oleh user saat ini
-    else:
-        foods = []  # Jika user tidak login, tidak ada makanan yang ditampilkan
-    return render(request, 'dashboard.html', {'foods': foods})
+    sort_by = request.GET.get('sort_by', 'price')  # Default ke 'price'
+    sort_order = request.GET.get('sort_order', 'asc')  # Default ke 'asc' (urutan naik)
+
+    # Tentukan urutan berdasarkan sort_by dan sort_order
+    if sort_by == 'name':
+        foods = Food.objects.filter(created_by=request.user).order_by('name' if sort_order == 'asc' else '-name')
+    else:  # Default ke pengurutan berdasarkan harga
+        foods = Food.objects.filter(created_by=request.user).order_by('price' if sort_order == 'asc' else '-price')
+
+    return render(request, 'dashboard.html', {'foods': foods, 'sort_by': sort_by, 'sort_order': sort_order})
 
 
 # Add Food AJAX
