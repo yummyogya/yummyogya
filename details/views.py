@@ -31,24 +31,20 @@ def add_review(request):
 
 def food_detail(request, food_id):
     # Coba dapatkan item dari model Makanan terlebih dahulu
-    item = Makanan.objects.filter(pk=food_id).first()
+    item = Makanan.objects.filter(pk=food_id).first() or Food.objects.filter(pk=food_id).first()
     if not item:
-        # Jika tidak ada di Makanan, coba cari di model Food
-        item = Food.objects.filter(pk=food_id).first()
-        if not item:
-            # Jika tidak ada di kedua model, kembalikan halaman 404
-            return render(request, '404.html')  # Pastikan '404.html' ada di templates folder
+        return render(request, '404.html')
 
     # Struktur konteks yang mendukung kedua model
-    item_context = {
-        'id': item.id,
-        'nama': item.nama if isinstance(item, Makanan) else item.name,  # Perbaiki nama atribut
-        'deskripsi': item.deskripsi if isinstance(item, Makanan) else item.description,
-        'harga': item.harga if isinstance(item, Makanan) else item.price,
-        'rating': item.rating,
-        'gambar': item.gambar if isinstance(item, Makanan) else item.image_url,
-        'restoran': item.restoran if isinstance(item, Makanan) else item.restaurant,
+    context = {
+        'item': {
+            'id': item.id,
+            'nama': item.nama if hasattr(item, 'nama') else item.name,
+            'deskripsi': item.deskripsi if hasattr(item, 'deskripsi') else item.description,
+            'harga': item.harga if hasattr(item, 'harga') else item.price,
+            'rating': item.rating,
+            'gambar': item.gambar if hasattr(item, 'gambar') else item.image_url,
+            'restoran': item.restoran if hasattr(item, 'restoran') else item.restaurant,
+        }
     }
-
-    return render(request,'food_detail.html', {'item': item_context})
-
+    return render(request, 'food_detail.html', context)

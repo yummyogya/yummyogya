@@ -1,4 +1,7 @@
-<!-- yummyogya/main/templates/food_detail.html -->
+{% extends 'base.html' %}
+{% block content %}
+{% include 'navbar.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +49,7 @@
             {% endfor %}
         </div>
 
-        <a href="{% url 'show_main' %}">Kembali ke Home</a>
+        <a href="{% url 'main:show_main' %}">Kembali ke Home</a>
     </div>
 
     <script>
@@ -85,3 +88,5 @@
     </script>
 </body>
 </html>
+
+{% endblock content %}
