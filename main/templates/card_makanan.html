@@ -12,12 +12,20 @@
     <!-- Pagination -->
     <div class="pagination">
         {% if page_obj.has_previous %}
-            <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}">Previous</a>
+            <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}" 
+               onclick="loadPage('{{ page_obj.previous_page_number }}'); return false;">
+                Previous
+            </a>
         {% endif %}
+        
         {% if page_obj.has_next %}
-            <a href="?q={{ query }}&page={{ page_obj.next_page_number }}">See More ></a>
+            <a href="?q={{ query }}&page={{ page_obj.next_page_number }}" 
+               onclick="loadPage('{{ page_obj.next_page_number }}'); return false;">
+                See More >
+            </a>
         {% endif %}
+        {% endif %}
+    
     </div>
-{% else %}
-    <p>Tidak ada data makanan yang ditemukan.</p>
-{% endif %}
+    
+

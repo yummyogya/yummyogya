@@ -24,7 +24,7 @@ def show_main(request):
     combined_makanan = list(semua_makanan) + list(user_makanan)
 
     # Pagination
-    paginator = Paginator(combined_makanan, 10)  # 10 items per page
+    paginator = Paginator(combined_makanan,8) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -39,24 +39,30 @@ def show_main(request):
 # Fungsi untuk handling request AJAX
 def search_ajax(request):
     query = request.GET.get('q', '')
-    
-    # Ambil makanan umum dari model Makanan
+    page_number = request.GET.get('page', 1)  # Get the requested page number, default to 1
+
+    # Retrieve general `Makanan` instances based on query
     makanan_list = Makanan.objects.filter(nama__icontains=query) if query else Makanan.objects.all()
     
-    # Ambil makanan yang hanya dibuat oleh user yang sedang login
+    # Retrieve `Food` instances created by the logged-in user
     if request.user.is_authenticated:
         user_makanan_list = Food.objects.filter(created_by=request.user)
         if query:
             user_makanan_list = user_makanan_list.filter(name__icontains=query)
     else:
-        user_makanan_list = Food.objects.none()  # Tidak ada makanan jika user tidak login
+        user_makanan_list = Food.objects.none()
 
+    # Combine both querysets and paginate
     combined_makanan = list(makanan_list) + list(user_makanan_list)
+    paginator = Paginator(combined_makanan, 8)  # Paginate with 8 items per page
 
-    # Mengemas hasil pencarian menjadi format JSON yang dapat di-render
+    # Get the requested page
+    page_obj = paginator.get_page(page_number)
+
+    # Prepare JSON-friendly data for each item
     makanan_data = []
-    for makanan in combined_makanan:
-        if isinstance(makanan, Makanan):  # Jika dari model Makanan
+    for makanan in page_obj.object_list:
+        if isinstance(makanan, Makanan):  # If it's a Makanan instance
             makanan_data.append({
                 'id': makanan.id,
                 'nama': makanan.nama,
@@ -66,7 +72,7 @@ def search_ajax(request):
                 'gambar': makanan.gambar,
                 'restoran': makanan.restoran
             })
-        elif isinstance(makanan, Food):  # Jika dari model Food
+        elif isinstance(makanan, Food):  # If it's a Food instance
             makanan_data.append({
                 'id': makanan.id,
                 'nama': makanan.name,
@@ -77,7 +83,14 @@ def search_ajax(request):
                 'restoran': makanan.restaurant
             })
 
-    return JsonResponse({'makanan_list': makanan_data})
+    # Return paginated data including previous and next page information
+    data = {
+        'makanan_list': makanan_data,
+        'previous_page': page_obj.previous_page_number() if page_obj.has_previous() else None,
+        'next_page': page_obj.next_page_number() if page_obj.has_next() else None,
+    }
+
+    return JsonResponse(data)
 
 
 def show_xml(request):
