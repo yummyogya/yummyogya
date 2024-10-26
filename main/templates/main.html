@@ -12,37 +12,61 @@
     }
 
     .container {
-        padding-top: 100px;
+        padding-top: 40px;
         width: 80%;
         margin: 20px auto;
     }
 
     .hero-section {
-    position: relative;
-    text-align: center;
-    padding: 120px 20px;
-    color: white;
-    margin-bottom: 40px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* Mencegah konten melampaui batas */
+        position: relative;
+        width: 100vw; /* Full width */
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw; /* Centers the full-width element */
+        margin-right: -50vw;
+        overflow: hidden;
+        padding: 120px 20px;
+        color: white;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        margin-bottom: 40px;
     }
 
     .hero-section video {
         position: absolute;
-        top: 50%;
+        top: 40%;
         left: 50%;
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Memastikan video menutupi area */
+        width: 100vw; /* Full width video */
+        height: 100vh; /* Full height video */
+        object-fit: cover;
         transform: translate(-50%, -50%);
-        z-index: -1; /* Video berada di belakang konten */
+        z-index: -1;
     }
 
     .hero-section h1,
     .hero-section p {
         position: relative; /* Memastikan teks muncul di depan video */
         z-index: 1; /* Konten di atas video */
+    }
+
+    .hero-content {
+        position: relative;
+        text-align: center;
+        z-index: 2;
+    }
+
+    .hero-content h1 {
+        font-weight: 700;
+        font-size: 4em;
+        margin-bottom: 10px;
+        letter-spacing: 0.05em;
+    }
+
+    .hero-content p {
+        font-size: 1.4em;
+        color: #f1f1f1;
+        max-width: 700px;
+        margin: 0 auto;
     }
 
 
@@ -73,25 +97,44 @@
         margin: 0 auto;
     }
 
-    /* Style baru sesuai tone gambar dan ruang kosong */
+
+    /* Existing styles remain unchanged... */
+
+    /* Adjusted article section */
     .article-section {
-        background-color: #ffffff;
+        background-color: rgba(82, 81, 81, 0.5); /* White background with 80% opacity */
         padding: 50px 40px;
+        margin-top: 40px;
         margin-bottom: 30px;
         border-radius: 16px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         text-align: center;
+        max-width: 800px; /* Optional: limit the width of the article section */
+        margin-left: auto; /* Center align */
+        margin-right: auto; /* Center align */
     }
+
+    /* Adjust card styles if necessary */
+    .card {
+        background-color: rgba(255, 255, 255, 0.9); /* White background with 90% opacity */
+        border: 1px solid rgba(221, 221, 221, 0.7); /* Lighter border for better visibility */
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+
 
     .article-section h2 {
         font-size: 3em;
-        color: #FF6600;
+        color: white;
         margin-bottom: 20px;
     }
 
     .article-section p {
         font-size: 1.2em;
-        color: #333;
+        color: white;
         margin-bottom: 25px;
         max-width: 800px;
         margin: 0 auto 30px;
@@ -129,7 +172,7 @@
 
     .search-bar input[type="text"]:focus {
         border-color: #FF4500;
-        outline: none;
+        /* outline: none; */
     }
 
     .search-bar button {
@@ -155,14 +198,6 @@
         margin-top: 40px;
     }
 
-    .card {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
 
     .card img {
         width: 100%;
@@ -236,23 +271,26 @@
             <source src="{% static 'media/video.mp4' %}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <h1>Yummyogya - Sahabat Kuliner Jogja</h1>
-        <p>Yummyogya hadir untuk membantu wisatawan dan masyarakat lokal menemukan makanan khas Yogyakarta. Temukan makanan legendaris maupun yang belum dikenal, serta dukung UMKM lokal!</p>
-    </div>
+        <div class="hero-content">
+            <h1>Yummyogya</h1>
+           
+            <p>Hadir membantu wisatawan dan masyarakat lokal menemukan makanan khas Yogyakarta. Temukan makanan legendaris maupun yang belum dikenal, serta dukung UMKM lokal!</p>
 
-
-    <div class="article-section">
-        <h2>Sejarah Kuliner Jogja</h2>
-        <p>Kuliner Yogyakarta memiliki akar budaya yang sangat dalam, mulai dari makanan tradisional Keraton hingga jajanan pasar yang tetap lestari hingga kini.</p>
-        <a href="#" class="btn-read-more">
-            Selengkapnya
-        </a>
+            <div class="article-section">
+                <h2>Sejarah Kuliner Jogja</h2>
+                <p>Kuliner Yogyakarta memiliki akar budaya yang sangat dalam, mulai dari makanan tradisional Keraton hingga jajanan pasar yang tetap lestari hingga kini.</p>
+                <a href="#" class="btn-read-more">
+                    Selengkapnya
+                </a>
+            </div>
+        </div>
     </div>
 
     <div class="search-bar">
-        <input type="text" id="search-query" value="{{ query }}" placeholder="Cari makanan...">
+        <input type="text" id="search-query" value="{{ query|default_if_none:'' }}" placeholder="Cari makanan...">
         <button id="search-button">Cari</button>
     </div>
+    
 
     <div id="search-results">
         {% include 'card_makanan.html' %}
@@ -262,6 +300,8 @@
 <footer>
     <p>&copy; 2024 Yummyogya. Semua hak dilindungi undang-undang.</p>
 </footer>
+
+
 
 <script>
     // Function to get the CSRF token from the cookie
@@ -285,8 +325,7 @@
         const searchButton = document.getElementById("search-button");
 
         searchButton.addEventListener("click", function() {
-            const query = document.getElementById("search-query").value;
-            const csrftoken = getCSRFToken();  // Get CSRF token
+            loadPage(1);  // Get CSRF token
 
             // AJAX request
             fetch(`/search-ajax/?q=${query}`, {
@@ -304,40 +343,42 @@
                     data.makanan_list.forEach(item => {
                         const cardHtml = `
                             <div id="search-results" class="cards">
-                                <img src="${item.gambar}" alt="${item.nama}" class="object-cover w-full h-48">
+                                <div class="card">
+                                    <img src="${item.gambar}" alt="${item.nama}" class="object-cover w-full h-48">
 
-                                <!-- Tombol Add to Wishlist dan Detail -->
-                                <div class="absolute top-4 right-2 flex space-x-2">
-                                    <!-- Wishlist Button -->
-                                    <button 
-                                        onclick="addToWishlist(${item.id})"
-                                        class="relative flex w-8 h-8 justify-center items-center bg-white text-white hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-white dark:hover:bg-gray-600 dark:focus:ring-green-800">
-                                        <svg fill="#000000" version="1.1" class="absolute w-6 h-6"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 512 512">
-                                            <g>
-                                                <path d="M294.957,478.609c-27.619,0-50.087-22.468-50.087-50.087c0-9.223-7.479-16.696-16.696-16.696H16.696
-                                                C7.479,411.826,0,419.299,0,428.522C0,474.554,37.446,512,83.478,512h211.478c9.217,0,16.696-7.473,16.696-16.696
-                                                C311.652,486.082,304.174,478.609,294.957,478.609z"/>
-                                            </g>
-                                        </svg>
-                                    </button>
+                                    <!-- Tombol Add to Wishlist dan Detail -->
+                                    <div class="absolute top-4 right-2 flex space-x-2">
+                                        <!-- Wishlist Button -->
+                                        <button 
+                                            onclick="addToWishlist(${item.id})"
+                                            class="relative flex w-8 h-8 justify-center items-center bg-white text-white hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-white dark:hover:bg-gray-600 dark:focus:ring-green-800">
+                                            <svg fill="#000000" version="1.1" class="absolute w-6 h-6"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 512 512">
+                                                <g>
+                                                    <path d="M294.957,478.609c-27.619,0-50.087-22.468-50.087-50.087c0-9.223-7.479-16.696-16.696-16.696H16.696
+                                                    C7.479,411.826,0,419.299,0,428.522C0,474.554,37.446,512,83.478,512h211.478c9.217,0,16.696-7.473,16.696-16.696
+                                                    C311.652,486.082,304.174,478.609,294.957,478.609z"/>
+                                                </g>
+                                            </svg>
+                                        </button>
 
-                                    <!-- Detail Button -->
-                                    <button onclick="showDetails(${item.id})"
-                                        class="relative flex w-8 h-8 justify-center items-center bg-white text-white hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-white dark:hover:bg-gray-600 dark:focus:ring-blue-800">
-                                        <svg fill="#000000" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                                        </svg>
-                                    </button>
-                                </div>
+                                        <!-- Detail Button -->
+                                        <button onclick="showDetails(${item.id})"
+                                            class="relative flex w-8 h-8 justify-center items-center bg-white text-white hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-white dark:hover:bg-gray-600 dark:focus:ring-blue-800">
+                                            <svg fill="#000000" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
 
-                                <!-- Card Body -->
-                                <div class="card-body p-4">
-                                    <h3 class="text-lg font-semibold">${item.nama}</h3>
-                                    <p class="price font-bold mt-2">Harga: Rp ${item.harga}</p>
-                                    <p class="restoran">Restoran: ${item.restoran}</p>
-                                    <p>Rating: ${item.rating} / 5</p>
+                                    <!-- Card Body -->
+                                    <div class="card-body p-4">
+                                        <h3 class="text-lg font-semibold">${item.nama}</h3>
+                                        <p class="price font-bold mt-2">Harga: Rp ${item.harga}</p>
+                                        <p class="restoran">Restoran: ${item.restoran}</p>
+                                        <p>Rating: ${item.rating} / 5</p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -367,6 +408,67 @@
             });
         });
     });
+
+    function loadPage(pageNumber) {
+        const query = document.getElementById("search-query").value;
+        const csrftoken = getCSRFToken();  // Get CSRF token
+
+        // AJAX request for pagination
+        fetch(`/search-ajax/?q=${query}&page=${pageNumber}`, {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': csrftoken,
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const searchResults = document.getElementById("search-results");
+            searchResults.innerHTML = '';  // Clear previous results
+
+            // Display search results
+            if (data.makanan_list.length > 0) {
+                data.makanan_list.forEach(item => {
+                    const cardHtml = `
+                        <div id="search-results" class="cards">
+                            <div class="card">
+                                <img src="${item.gambar}" alt="${item.nama}" class="object-cover w-full h-48">
+                                <div class="card-body p-4">
+                                    <h3 class="text-lg font-semibold">${item.nama}</h3>
+                                    <p class="price font-bold mt-2">Harga: Rp ${item.harga}</p>
+                                    <p class="restoran">Restoran: ${item.restoran}</p>
+                                    <p>Rating: ${item.rating} / 5</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    searchResults.insertAdjacentHTML('beforeend', cardHtml);
+                });
+
+                // Update pagination buttons
+                const pagination = document.querySelector(".pagination");
+                pagination.innerHTML = '';
+
+                if (data.previous_page) {
+                    pagination.insertAdjacentHTML('beforeend', 
+                        `<a href="#" onclick="loadPage(${data.previous_page}); return false;" 
+                            class="pagination-btn">Previous</a>`);
+                }
+                if (data.next_page) {
+                    pagination.insertAdjacentHTML('beforeend', 
+                        `<a href="#" onclick="loadPage(${data.next_page}); return false;" 
+                            class="pagination-btn">Next</a>`);
+                }
+            } else {
+                searchResults.innerHTML = '<p>Tidak ada hasil ditemukan.</p>';
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching pagination results:", error);
+            searchResults.innerHTML = '<p>Terjadi kesalahan saat memuat halaman.</p>';
+        });
+    }
+
+
 </script>
 
 {% endblock %}
