@@ -1,23 +1,33 @@
 {% extends 'base.html' %}
-{% block content %}
-{% include 'navbar.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Artikel</title>
-</head>
-<body>
-    <h1>Daftar Artikel</h1>
-    <ul>
+{% block content %}
+{% include 'navbar.html' %}
+
+{# Pastikan CSS ter-load #}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/article_list.css' %}">
+
+<div class="container">
+    <h1>Artikel Kuliner Yogyakarta</h1>
+    <div class="article-list">
         {% for article in articles %}
-            <li><a href="{% url 'main:article_detail' article.id %}">{{ article.title }}</a></li>
+            <article class="article-item">
+                <div class="article-content">
+                    {% if article.image %}
+                        <img src="{% static 'images/default-culinary.jpg' %}" alt="{{ article.title }}" class="article-image">
+                    {% endif %}
+                    <div class="article-text">
+                        <h2>{{ article.title }}</h2>
+                        <p class="publication-date">Diterbitkan pada {{ article.publication_date }}</p>
+                        <p class="content-preview">{{ article.content|truncatewords:30 }}</p>
+                        <a href="{% url 'main:article_detail' article.id %}" class="read-more">Baca Selengkapnya</a>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <p class="no-articles">Tidak ada artikel yang ditemukan.</p>
         {% endfor %}
-    </ul>
-</body>
-</html>
+    </div>
+</div>
 
 {% endblock content %}
