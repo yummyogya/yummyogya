@@ -14,7 +14,7 @@
     <h1>Daftar Artikel</h1>
     <ul>
         {% for article in articles %}
-            <li><a href="{% url 'article_detail' article.id %}">{{ article.title }}</a></li>
+            <li><a href="{% url 'main:article_detail' article.id %}">{{ article.title }}</a></li>
         {% endfor %}
     </ul>
 </body>

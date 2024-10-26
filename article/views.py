@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+
 # View untuk menampilkan daftar artikel
 def article_list(request):
     # Daftar artikel dengan data disimpan dalam dictionary
