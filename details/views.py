@@ -37,14 +37,14 @@ def food_detail(request, item_id):
         item = Food.objects.filter(pk=item_id).first()
         if not item:
             # Jika tidak ada di kedua model, kembalikan halaman 404
-            return render(request, '404.html')
+            return render(request, '404.html')  # Pastikan '404.html' ada di templates folder
 
-    # Sesuaikan struktur konteks agar item bisa digunakan baik dari model Makanan atau Food
+    # Struktur konteks yang mendukung kedua model
     item_context = {
         'id': item.id,
         'nama': getattr(item, 'nama', item.name),
         'deskripsi': getattr(item, 'deskripsi', item.description),
-        'harga': item.harga if isinstance(item, Makanan) else item.price,
+        'harga': getattr(item, 'harga', item.price),
         'rating': item.rating,
         'gambar': getattr(item, 'gambar', item.image_url),
         'restoran': getattr(item, 'restoran', item.restaurant)
