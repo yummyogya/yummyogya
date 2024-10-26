@@ -11,9 +11,20 @@
     <title>{{ article.title }}</title>
 </head>
 <body>
+
+<div class="container">
     <h1>{{ article.title }}</h1>
-    <p>{{ article.content }}</p>
+    <p class="publication-date">Diterbitkan pada {{ article.publication_date }}</p>
+    {% if article.image %}
+    <img src="{{ article.image.url }}" alt="{{ article.title }}" class="article-image">
+    {% endif %}
+    <div class="content">
+        {{ article.content }}
+    </div>
+</div>
+
 </body>
 </html>
+
 
 {% endblock content %}
