@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib import messages
-from .forms import ProfileUpdateForm  # Define this in forms.py
+from .forms import ProfileUpdateForm 
 from django.contrib.auth import update_session_auth_hash
-from wishlist.models import Wishlist  # Assuming wishlist items are stored here
-# from details.models import Review  # Assuming reviews are stored in a model named Review
+from wishlist.models import Wishlist
+from details.models import Review
 from django.http import JsonResponse
 from .models import Profile
 
@@ -14,13 +13,17 @@ from .models import Profile
 @login_required
 def show_profile(request):
     user = request.user
-    wishlist_items = Wishlist.objects.filter(user=user)[:3]  # Asumsi ada wishlist model
+    # Fetch or create the wishlist for the user
+    wishlist, created = Wishlist.objects.get_or_create(user=user)
+    wishlist_items = wishlist.food.all()[:3]
+    reviews = Review.objects.filter(user=user).select_related('food', 'food_alt')
     profile, created = Profile.objects.get_or_create(user=user)  # Buat profil jika belum ada
 
     context = {
         'user': user,
         'profile_form': ProfileUpdateForm(instance=profile),
         'wishlist_items': wishlist_items,
+        'reviews': reviews,
     }
     return render(request, 'profile.html', context)
 
@@ -32,10 +35,25 @@ def update_profile(request):
         delete_photo = request.POST.get('delete_photo', False)
 
         if profile_form.is_valid():
+            new_bio = profile_form.cleaned_data.get('bio')
+            if new_bio:
+                profile.bio = new_bio
             if delete_photo:
                 profile.profile_photo.delete()
             profile_form.save()
             return JsonResponse({'success': True})
         else:
             return JsonResponse({'success': False, 'errors': profile_form.errors})
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        password_form = PasswordChangeForm(user=request.user, data=request.POST)
+        if password_form.is_valid():
+            password_form.save()
+            update_session_auth_hash(request, password_form.user)  # Agar pengguna tidak logout setelah mengganti password
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': password_form.errors})
     return JsonResponse({'success': False, 'error': 'Invalid request'})
