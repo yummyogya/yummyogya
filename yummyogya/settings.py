@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-vt(=@#j5u198&3wkr0!ovbc)2(r!!&fgs5y&+x0(6lbl1(rs7('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+PRODUCTION = os.getenv("PRODUCTION", False)
+DEBUG = not PRODUCTION
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "david-juan-yummyogya.pbp.cs.ui.ac.id"]
 
@@ -125,7 +126,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
 if DEBUG:
     STATICFILES_DIRS = [
         BASE_DIR / 'static' # merujuk ke /static root project pada mode development
@@ -141,6 +141,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True

@@ -1,6 +1,6 @@
 ## ˚ 🥟⋅🥡₊ yummyogya   ࣪˖ ִֶ🍛 ࿔*
 
-*Anggota Kelompok B05*
+*Anggota Kelompok B10*
 
 1. Farrell Zidane Raihandrawan (2306275600) 
 2. Salsabila Caturizky Farindarmawan (2306275664)
@@ -34,7 +34,7 @@ Aplikasi ini tidak hanya membantu untuk menemukan makanan khas Jogja yang legend
 
 2. Modul Ulasan Pengguna dan Menampilkan detail Makanan (dikerjakan oleh Aliyah Nahisa Sugiana)
 
-Pengelompokan makanan dilakukan berdasarkan jenis atau lokasi, seperti camilan ekstrim, makanan berat, atau pendamping gudeg sehingga pengguna dapat menelusuri daftar makanan di setiap kategori dengan lebih mudah. Bagi pengguna yang sudah login, mereka dapat memberikan ulasan dan rating untuk tempat makan yang pernah dikunjungi. Ulasan dan rating ini nantinya bisa dilihat oleh pengguna lain untuk membantu mereka dalam memilih tempat makan yang sesuai.
+Modul ini memungkinkan pengguna untuk melihat detail makanan dan memberikan ulasan serta rating untuk tempat makan yang pernah dikunjungi. Pengguna yang sudah login dapat memberikan ulasan dan rating yang nantinya akan ditampilkan kepada pengguna lain. Fitur ini membantu pengguna dalam memilih tempat makan yang sesuai berdasarkan pengalaman pengguna lain.
 
 3. Modul Profil Pengguna dan Login (dikerjakan oleh Salsabila Caturizky Farindarmawan)
 
