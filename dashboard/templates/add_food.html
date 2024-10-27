@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ form.instance.pk|yesno:"Edit,Tambah" }} Makanan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: white;
+            font-family: "Poppins", sans-serif;
+            background-color: #fff7eb;
             margin: 0;
             padding: 20px;
             color: #333;
@@ -17,42 +18,60 @@
             margin: auto;
             background: white;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         h2 {
             text-align: center;
-            color: #333;
+            color: #e67e22;
+            margin-bottom: 20px;
         }
         form {
             display: flex;
             flex-direction: column;
         }
+        form label {
+            margin-bottom: 5px;
+            color: black;
+            font-weight: bold;
+        }
         form input, form select {
-            margin-bottom: 15px;
+            margin-bottom: 2px;  /* Perkecil jarak antar input */
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 16px;
+            font-size: 15px;
+            font-family: "Poppins", sans-serif;
         }
-        button {
+        form input:focus, form select:focus {
+            border-color: #e67e22;
+            box-shadow: 0 0 5px rgba(230, 126, 34, 0.5);
+        }
+        button.btn {
+            display: block; /* Makes the button a block element */
+            margin: 0 auto;
+            width: 200px;
             padding: 10px;
-            background-color: #28a745;
+            background-color: #e67e22;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            font-family: "Poppins", sans-serif;
         }
-        button:hover {
-            background-color: #218838;
+        button.btn:hover {
+            background-color: #d35400;
         }
         .cancel {
             text-align: center;
             display: block;
-            margin-top: 15px;
-            color: red;
+            margin-top: 12px;
+            color: #e74c3c;
             text-decoration: none;
+            font-weight: bold;
         }
         .cancel:hover {
             text-decoration: underline;
@@ -60,8 +79,9 @@
         #success-message, #error-message {
             display: none;
             padding: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-align: center;
+            border-radius: 5px;
         }
         #success-message {
             color: #155724;
@@ -86,39 +106,33 @@
         <form method="post" class="food-form" id="food-form">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn" >Simpan</button>
-          
-            
+            <button type="submit" class="btn">Simpan</button>
         </form>
-        <a href="{% url 'dashboard:dashboard' %}" class="btn cancel">Batal</a>
+        <a href="{% url 'dashboard:dashboard' %}" class="cancel">Batal</a>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#food-form').on('submit', function(event) {
-                event.preventDefault();  // Mencegah reload halaman
-    
-                // Ambil data dari form
+                event.preventDefault();
+
                 var formData = $(this).serialize();
                 
                 $.ajax({
                     type: 'POST',
-                    url: "{% url 'dashboard:add_food' %}",  // URL tujuan AJAX
+                    url: "{% url 'dashboard:add_food' %}",
                     data: formData,
                     success: function(response) {
                         if (response.status === 'success') {
-                            // Tampilkan pesan sukses
                             $('#success-message').text(response.message).fadeIn();
-    
-                            // Arahkan ke dashboard setelah 2 detik
+
                             setTimeout(function() {
-                                window.location.href = "{% url 'dashboard:dashboard' %}";  // Ganti dengan URL dashboard
-                            }, 1000); // Mengarahkan setelah 2 detik
+                                window.location.href = "{% url 'dashboard:dashboard' %}";
+                            }, 1000);
                         }
                     },
                     error: function(xhr, status, error) {
-                        // Tampilkan pesan error
                         $('#error-message').text('Terjadi kesalahan. Silakan coba lagi.').fadeIn();
                         $('#success-message').fadeOut();
                     }
@@ -126,7 +140,5 @@
             });
         });
     </script>
-    
-   
 </body>
 </html>

@@ -1,145 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'dashboard/styles.css' %}"> <!-- Sesuaikan path ke file CSS -->
-    
-    <!-- Link Font Poppins dari Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+{% extends "base.html" %}
+{% load static %}
 
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif; /* Terapkan font Poppins ke seluruh halaman */
-        }
-        .card {
-            position: relative;
-            overflow: hidden;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            min-height: 500px;
-            min-height: 0;
-        }
-        .image-container {
-            width: 100%;
-            height: 200px;
-            margin: 0;
-            padding: 0;
-        }
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .card-body {
-            padding: 16px; /* Tambahkan padding agar teks tidak terlalu mepet ke kiri */
-        }
-        .edit-icon,
-        .delete-icon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 24px;
-            height: 24px;
-        }
-        .card-buttons a {
-            margin-right: 8px; /* Tambahkan margin untuk memberi jarak antar tombol */
-        }
-        .rating {
-            color: black; /* Mengubah warna tulisan rating menjadi hitam */
-        }
-        .add-food-btn {
-            background-color: #FF6600;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 4px;
-            text-decoration: none;
-        }
-        .add-food-btn:hover {
-            background-color: #e65c00;
-        }
-        .card-buttons .btn {
-            background-color: #FF6600;
-            color: white;
-            border-radius: 4px;
-            padding: 8px;
-        }
-        .card-buttons .btn:hover {
-            background-color: #e65c00;
-        }
-    </style>
-</head>
-<body>
-    <div class="dashboard-container flex flex-col items-center justify-center min-h-screen">
-        <h2 class="dashboard-title">Dashboard Kamu</h2>
+{% block content %}
+<div class="dashboard-container flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+    <h2 class="text-4xl font-bold text-gray-800 mb-6">Dashboard Kamu</h2>
+    <a href="{% url 'dashboard:add_food' %}" class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-700 transition duration-300 mb-8">Tambah Makanan Baru</a>
 
-        <a href="{% url 'dashboard:add_food' %}" class="btn add-food-btn">Tambah Makanan Baru</a>
-    </div>
-
-    <div class="sort-options" style="text-align: center; margin-bottom: 20px;">
-        <form method="get" action="{% url 'dashboard:dashboard' %}">
-            <label for="sort_by">Sort by:</label>
-            <select name="sort_by" id="sort_by">
+    <div class="sort-options text-center mb-4">
+        <form method="get" action="{% url 'dashboard:dashboard' %}" class="inline-flex items-center gap-2">
+            <label for="sort_by" class="font-semibold text-gray-700">Sort by:</label>
+            <select name="sort_by" id="sort_by" class="border border-gray-300 rounded p-1">
                 <option value="price" {% if sort_by == 'price' %}selected{% endif %}>Price</option>
                 <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name</option>
             </select>
             
-            <select name="sort_order" id="sort_order" onchange="this.form.submit()">
+            <select name="sort_order" id="sort_order" class="border border-gray-300 rounded p-1" onchange="this.form.submit()">
                 <option value="asc" {% if sort_order == 'asc' %}selected{% endif %}>Ascending</option>
                 <option value="desc" {% if sort_order == 'desc' %}selected{% endif %}>Descending</option>
             </select>
         </form>
     </div>
 
-    
     {% if foods %}
-      <div class="food-cards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {% for food in foods %}
-            <div class="card relative shadow-lg rounded-lg overflow-hidden bg-white">
-                <!-- Gambar makanan -->
-                <div class="image-container">
-                    <img src="{{ food.image_url }}" alt="{{ food.name }}">
+        <div class="food-cards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 w-full">
+            {% for food in foods %}
+                <div class="card shadow-lg rounded-lg overflow-hidden bg-white hover:shadow-xl transition duration-300">
+                    <div class="image-container">
+                        <img src="{{ food.image_url }}" alt="{{ food.name }}" class="w-full h-48 object-cover">
+                    </div>
+
+                    <div class="card-body p-4">
+                        <h3 class="text-lg font-semibold text-gray-800">{{ food.name }}</h3>
+                        <p class="text-gray-600">{{ food.description }}</p>
+
+                        <div class="price font-bold mt-2 flex items-center text-gray-800">
+                            <img src="https://pngimg.com/uploads/dollar_sign/dollar_sign_PNG37.png" alt="Dollar icon" class="w-4 h-4 mr-2">
+                            Rp {% with price=food.price|stringformat:"d" %}
+                            {{ price|slice:":-3" }}.{{ price|slice:"-3:" }}
+                            {% endwith %}
+                        </div>
+
+                        <div class="restoran flex items-center mt-2 text-black-600">
+                            <img src="https://static.vecteezy.com/system/resources/previews/000/583/611/original/location-icon-vector.jpg" alt="Location icon" class="w-4 h-4 mr-2">
+                            {{ food.restaurant }}
+                        </div>
+
+                        <div class="rating flex items-center mt-2 mb-8 text-black-500">
+                            <img src="https://static.vecteezy.com/system/resources/previews/000/367/368/original/star-vector-icon.jpg" alt="Star icon" class="w-4 h-4 mr-2">
+                            {{ food.rating|floatformat:1 }} / 5
+                        </div>
+
+                         <!-- Tambahkan margin bottom pada tombol -->
+                         <div class="card-buttons mt-4 mb-2 flex justify-between">
+                            <a href="{% url 'dashboard:edit_food' food.pk %}" class="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 flex items-center">
+                                <img src="https://icon-library.com/images/edit-svg-icon/edit-svg-icon-22.jpg" alt="Edit" class="w-4 h-4 mr-1"> Edit
+                            </a>
+                            <a href="{% url 'dashboard:delete_food' food.pk %}" class="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300 flex items-center">
+                                <img src="https://static-00.iconduck.com/assets.00/delete-icon-1864x2048-bp2i0gor.png" alt="Delete" class="w-4 h-4 mr-1"> Hapus
+                            </a>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="card-body p-4">
-                    <h3 class="text-lg font-semibold">{{ food.name }}</h3>
-                    <p>{{ food.description }}</p>
-
-                    <div class="price font-bold mt-2 flex items-center">
-                        <img src="https://pngimg.com/uploads/dollar_sign/dollar_sign_PNG37.png" alt="Dollar icon" style="width: 20px; vertical-align: middle; margin-right: 8px;" class="w-4 h-4 mr-2">
-                        Rp {% with price=food.price|stringformat:"d" %}
-                        {{ price|slice:":-3" }}.{{ price|slice:"-3:" }}
-                        {% endwith %}
-                    </div>
-
-                    <div class="restoran flex items-center mt-2">
-                        <img src="https://static.vecteezy.com/system/resources/previews/000/583/611/original/location-icon-vector.jpg" alt="Location icon" style="width: 20px; vertical-align: middle; margin-right: 8px;" class="w-4 h-4 mr-2">
-                        {{ food.restaurant }}
-                    </div>
-
-                    <div class="rating flex items-center mt-2">
-                        <img src="https://static.vecteezy.com/system/resources/previews/000/367/368/original/star-vector-icon.jpg" alt="Star icon" style="width: 20px; vertical-align: middle; margin-right: 8px;" class="w-4 h-4 mr-2">
-                        {{ food.rating|floatformat:1 }} / 5 <!-- Menampilkan 1 angka di belakang koma -->
-                    </div>
-                    
-                    <div class="card-buttons mt-4 flex">
-                        <a href="{% url 'dashboard:edit_food' food.pk %}" class="btn" title="Edit">
-                            <img src="https://icon-library.com/images/edit-svg-icon/edit-svg-icon-22.jpg" alt="Edit" style="width: 20px; height: 20px;">
-                        </a>
-                        <a href="{% url 'dashboard:delete_food' food.pk %}" class="btn" title="Hapus">
-                            <img src="https://static-00.iconduck.com/assets.00/delete-icon-1864x2048-bp2i0gor.png" alt="Delete" style="width: 20px; height: 20px;">
-                        </a>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-      </div>
+            {% endfor %}
+        </div>
     {% else %}
-        <p>Belum ada makanan yang dibuat.</p>
+        <p class="text-gray-700 text-center mt-6">Belum ada makanan yang dibuat.</p>
     {% endif %}
-</body>
-</html>
+</div>
+{% endblock content %}
