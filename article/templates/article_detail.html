@@ -5,16 +5,16 @@
 <div class="container mx-auto p-5 mt-10">
     <div class="bg-white p-8 rounded-lg shadow-md">
         {% if article.image %}
-            <img src="{{ article.image.url }}" alt="{{ article.title }}" class="w-1/2 h-auto rounded-lg mb-5 object-cover mx-auto"> <!-- Mengatur lebar gambar menjadi setengah dari container dan menambahkan margin otomatis untuk center alignment -->
+            <img src="{{ article.image.url }}" alt="{{ article.title }}" class="w-1/2 h-auto rounded-lg mb-5 object-cover mx-auto">
         {% else %}
-            <img src="{% static 'images/default-culinary.jpg' %}" alt="{{ article.title }}" class="w-1/2 h-auto rounded-lg mb-5 object-cover mx-auto"> <!-- Mengatur lebar gambar menjadi setengah dari container dan menambahkan margin otomatis untuk center alignment -->
+            <img src="{% static 'images/default-culinary.jpg' %}" alt="{{ article.title }}" class="w-1/2 h-auto rounded-lg mb-5 object-cover mx-auto">
         {% endif %}
         <h1 class="text-4xl font-bold mb-5">{{ article.title }}</h1>
         <p class="text-sm text-gray-500 mb-5">Diterbitkan pada {{ article.published_date }}</p>
         <div class="prose max-w-none text-justify">
-            {{ article.content|safe }} <!-- Gunakan filter safe untuk merender konten HTML -->
+            {{ article.content|safe }}
         </div>
-        <a href="{% url 'article:article_list' %}" class="mt-5 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300">Back to Articles</a> <!-- Tambahkan tombol "Back" -->
+        <a href="{% url 'article:article_list' %}" class="mt-5 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300">Back to Articles</a>
     </div>
 </div>
 {% endblock content %}
