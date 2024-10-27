@@ -23,10 +23,10 @@
         {% endfor %}
     </div>
     {% if page_obj.has_next %}
-    <button id="load-more" class="mt-5 mb-5 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300" data-page="2">Load More</button>
+    <button id="load-more" class="mt-5 mb-5 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition duration-300" data-page="2">Load More</button>
     {% endif %}
     <br>
-    <a href="{% url 'main:show_main' %}" class="mb-5 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300">Back to Home</a>
+    <a href="{% url 'main:show_main' %}" class="mb-5 inline-block px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition duration-300">Back to Home</a>
 </div>
 
 <script>
