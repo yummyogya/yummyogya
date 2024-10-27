@@ -9,7 +9,7 @@
     <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
         <div class="flex items-center space-x-4">
             {% if user.profile.profile_photo %}
-                <img src="{{ user.profile.profile_photo.url }}" alt="Foto Profil" class="w-16 h-16 rounded-full border-2 border-black">
+                <img src="{{ user.profile.profile_photo.url }}" alt="Foto Profil" class="w-16 h-16 rounded-full object-cover border-2 border-black">
             {% else %}
                 <div class="relative w-16 h-16 overflow-hidden bg-gray-600 rounded-full">
                     <svg class="absolute w-20 h-20 text-gray-300 -left-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -95,19 +95,17 @@
         </div>
         
         <!-- Wishlist Content -->
-        <div style="padding: 15px;">
+        <div class="p-4">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
                 {% if wishlist_items %}
                     {% for item in wishlist_items %}
-                        <div style="background-color: #ffffffe6; border: 1px solid #ddddddb3; border-radius: 16px; box-shadow: 0 4px 12px #0000001a; padding-bottom: 10px; overflow: hidden;"
-                            onmouseover="this.style.backgroundColor='#fff7e6';"
-                            onmouseout="this.style.backgroundColor='#ffffffe6';">
-                            <img src="{{ item.gambar }}" alt="{{ item.nama }}" style="width: 100%; height: 200px; object-fit: cover; border-top-left-radius: 16px; border-top-right-radius: 16px;">
-                            <div style="padding: 15px; text-align: center;">
+                        <div class="bg-white/90 border border-gray-300 rounded-lg shadow-md pb-2 overflow-hidden hover:bg-orange-50 transition duration-200">
+                            <img src="{{ item.gambar }}" alt="{{ item.nama }}" class="w-full h-48 object-cover rounded-t-lg">
+                            <div class="p-4 text-center">
                                 <a href="{% url 'details:food_detail' item.id %}" class="font-semibold text-orange-600 text-lg no-underline hover:underline">{{ item.nama }}</a>
-                                <p style="font-size: 1rem; color: #555; margin-bottom: 5px;">Harga: Rp {{ item.harga }}</p>
-                                <p style="font-size: 1rem; color: #555; margin-bottom: 5px;">{{ item.deskripsi|truncatewords:7 }}</p>
-                                <p style="font-size: 1rem; color: #FFA500; margin-bottom: 5px;">Rating: {{ item.rating }} / 5</p>
+                                <p class="text-base text-gray-600 mb-1">Harga: Rp {{ item.harga }}</p>
+                                <p class="text-base text-gray-600 mb-1">{{ item.deskripsi|truncatewords:7 }}</p>
+                                <p class="text-base text-orange-400 mb-1">Rating: {{ item.rating }} / 5</p>
                             </div>
                         </div>
                     {% endfor %}
@@ -126,14 +124,20 @@
             <h3 class="text-xl font-semibold">Riwayat Ulasan</h3>
         </div>
         
+        <!-- Filter Ascending Descending -->
+        <div class="flex justify-start ml-4 mt-4 ">
+            <select id="review-order" class="border border-orange-300 rounded px-2 py-1">
+                <option value="latest" {% if request.GET.order == "latest" %}selected{% endif %}>Terbaru</option>
+                <option value="oldest" {% if request.GET.order == "oldest" %}selected{% endif %}>Terlama</option>
+            </select>
+        </div>
+
         <!-- Riwayat Ulasan Content -->
-        <div style="padding: 15px;">
+        <div class="p-4">
             {% if reviews %}
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {% for review in reviews %}
-                        <div style="padding: 15px; background-color: #f9f9f9; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #FF6600;"
-                            onmouseover="this.style.backgroundColor='#fff7e6';"
-                            onmouseout="this.style.backgroundColor='#f9f9f9';">
+                        <div class="p-4 bg-gray-100 rounded-lg mb-2 border-l-4 border-orange-600 hover:bg-orange-100">
                        <a href="{% url 'details:food_detail' review.food.id %}" class="text-orange-600 font-semibold hover:underline">
                                 {% if review.food %}
                                     {{ review.food.nama }}
@@ -142,7 +146,7 @@
                                 {% endif %}
                             </a>
                             <p class="text-sm text-gray-600">Rating: {{ review.rating }}/5</p>
-                            <p class="text-gray-800">{{ review.review|truncatewords:4 }}</p>
+                            <p class="text-gray-800">{{ review.review|truncatewords:6 }}</p>
                         </div>
                     {% endfor %}
                 </div>
@@ -256,6 +260,14 @@
             console.error('Error:', error);
             alert('Terjadi kesalahan, silakan coba lagi.');
         });
+    });
+
+    // Filter Ulasan
+    document.getElementById('review-order').addEventListener('change', function() {
+        const order = this.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('order', order);
+        window.location.href = url.toString();
     });
 </script>
 
