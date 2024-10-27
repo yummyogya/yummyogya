@@ -38,8 +38,8 @@ def add_review(request):
         return JsonResponse({'message': 'Failed to add review', 'status': 'error'})
     return JsonResponse({'message': 'Invalid request method', 'status': 'error'})
 
-def food_detail(request, food_id):
-    item = Makanan.objects.filter(pk=food_id).first() or Food.objects.filter(pk=food_id).first()
+def food_detail(request, id):
+    item = Makanan.objects.filter(pk=id).first() or Food.objects.filter(pk=id).first()
     if not item:
         return render(request, '404.html')
 
