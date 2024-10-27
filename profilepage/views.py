@@ -16,9 +16,14 @@ def show_profile(request):
     # Fetch or create the wishlist for the user
     wishlist, created = Wishlist.objects.get_or_create(user=user)
     wishlist_items = wishlist.food.all()[:3]
-    reviews = Review.objects.filter(user=user).select_related('food', 'food_alt')
     profile, created = Profile.objects.get_or_create(user=user)  # Buat profil jika belum ada
     last_login = request.COOKIES.get('last_login', 'Not available')
+
+    order = request.GET.get('order', 'latest')
+    if order == 'latest':
+        reviews = Review.objects.filter(user=user).order_by('-created_at').select_related('food', 'food_alt')
+    else:
+        reviews = Review.objects.filter(user=user).order_by('created_at').select_related('food', 'food_alt')
 
     context = {
         'user': user,
@@ -38,7 +43,7 @@ def update_profile(request):
 
         if profile_form.is_valid():
             new_bio = request.POST.get('bio')
-            if new_bio.strip():
+            if new_bio is not None:
                 profile.bio = new_bio
             if delete_photo:
                 profile.profile_photo.delete()
