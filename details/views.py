@@ -39,12 +39,11 @@ def add_review(request):
     return JsonResponse({'message': 'Invalid request method', 'status': 'error'})
 
 def food_detail(request, food_id):
-    # Coba dapatkan item dari model Makanan terlebih dahulu
     item = Makanan.objects.filter(pk=food_id).first() or Food.objects.filter(pk=food_id).first()
     if not item:
         return render(request, '404.html')
 
-    # Struktur konteks yang mendukung kedua model
+    reviews = item.review_set.all()  # Ambil semua ulasan untuk item ini
     context = {
         'item': {
             'id': item.id,
@@ -54,6 +53,7 @@ def food_detail(request, food_id):
             'rating': item.rating,
             'gambar': item.gambar if hasattr(item, 'gambar') else item.image_url,
             'restoran': item.restoran if hasattr(item, 'restoran') else item.restaurant,
-        }
+        },
+        'reviews': reviews  # Tambahkan daftar ulasan ke konteks
     }
     return render(request, 'food_detail.html', context)

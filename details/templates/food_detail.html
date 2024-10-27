@@ -30,7 +30,7 @@
     <!-- Menampilkan Ulasan -->
     <h3 style="color: #FF6600; margin-top: 1.5em;">Ulasan Pengguna:</h3>
     <div class="reviews" style="margin-top: 20px;">
-        {% for review in item.review_set.all %}
+        {% for review in reviews %}
             <div class="review-item" style="padding: 15px; background-color: #f9f9f9; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #FF6600;">
                 <p><strong>{{ review.user.username }}</strong> rated: {{ review.rating }} / 5</p>
                 <p>{{ review.review }}</p>
@@ -40,9 +40,6 @@
             <p>Tidak ada ulasan untuk makanan ini.</p>
         {% endfor %}
     </div>
-
-    <a href="{% url 'main:show_main' %}" style="display: inline-block; margin-top: 20px; color: #FF6600; text-decoration: none; font-weight: bold;">Kembali ke Home</a>
-</div>
 
 <footer class="bg-orange-600 text-white text-center py-3">
     <p>&copy; 2024 Yummyogya. Semua hak dilindungi undang-undang.</p>
