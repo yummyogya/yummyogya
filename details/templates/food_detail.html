@@ -2,39 +2,52 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-<div class="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-20">
-    <h1 class="text-2xl text-orange-500 font-semibold">{{ item.nama }}</h1>
-    <img src="{{ item.gambar }}" alt="{{ item.nama }}" class="w-full max-w-md rounded-lg my-4 mx-auto">
-    <p class="text-gray-700">Deskripsi: {{ item.deskripsi }}</p>
-    <p class="text-gray-700">Harga: Rp {{ item.harga }}</p>
-    <p class="text-gray-700">Restoran: {{ item.restoran }}</p>
-    <p class="text-gray-700">Rating: {{ item.rating }} / 5</p>
-
-    <!-- Form untuk menambahkan ulasan -->
-    <h2 class="text-orange-500 font-semibold mt-6 mb-2">Ulasan</h2>
-    <form id="review-form" class="space-y-4 mt-4">
-        <div id="rating-stars" class="flex space-x-2 text-gray-300 text-2xl cursor-pointer">
-            {% for i in "12345" %}
-                <span onclick="setRating({{ forloop.counter }})" onmouseover="highlightStars({{ forloop.counter }})" onmouseout="resetStars()">&#9733;</span>
-            {% endfor %}
+<div class="container mx-auto p-4 lg:p-8">
+    <div class="bg-white rounded-lg shadow-lg mt-20 w-full lg:flex lg:flex-row p-6">
+        <!-- Gambar dan Info Utama -->
+        <div class="lg:w-1/2 mb-6 lg:mb-0 lg:pr-4"> <!-- Menambahkan padding kanan -->
+            <img src="{{ item.gambar }}" alt="{{ item.nama }}" class="w-full rounded-lg">
         </div>
-        <textarea id="review" name="review" placeholder="Tulis ulasan di sini..." required class="w-full p-2 border border-gray-300 rounded-lg resize-y"></textarea>
-        <input type="hidden" id="rating" name="rating" value="0">
-        <button type="button" onclick="submitReview({{ item.id }})" class="bg-orange-500 text-white py-2 px-6 rounded-full hover:bg-orange-600 transition duration-300">Kirim Ulasan</button>
-    </form>
+        
+        <!-- Detail Makanan dan Form Ulasan -->
+        <div class="lg:w-1/2 space-y-4">
+            <h1 class="text-2xl text-orange-500 font-semibold">{{ item.nama }}</h1>
+            <p class="text-gray-700">Deskripsi: {{ item.deskripsi }}</p>
+            <p class="text-gray-700">Harga: Rp {{ item.harga }}</p>
+            <p class="text-gray-700">Restoran: {{ item.restoran }}</p>
+            <p class="text-gray-700">Rating: {{ item.rating }} / 5</p>
 
-    <!-- Menampilkan Ulasan -->
-    <h3 class="text-orange-500 font-semibold mt-8">Ulasan Pengguna:</h3>
-    <div class="mt-4 space-y-4">
-        {% for review in reviews %}
-            <div class="p-4 bg-gray-100 rounded-lg border-l-4 border-orange-500">
-                <p class="font-bold">{{ review.user.username }} rated: {{ review.rating }} / 5</p>
-                <p>{{ review.review }}</p>
-                <p class="text-gray-500 text-sm">{{ review.created_at|date:"Y-m-d H:i" }}</p>
+            <!-- Form untuk menambahkan ulasan -->
+            <h2 class="text-orange-500 font-semibold mt-6 mb-2">Ulasan</h2>
+            <form id="review-form" class="space-y-4">
+                <div id="rating-stars" class="flex space-x-2 text-gray-300 text-2xl cursor-pointer">
+                    {% for i in "12345" %}
+                        <span onclick="setRating({{ forloop.counter }})" onmouseover="highlightStars({{ forloop.counter }})" onmouseout="resetStars()">&#9733;</span>
+                    {% endfor %}
+                </div>
+                <textarea id="review" name="review" placeholder="Tulis ulasan di sini..." required class="w-full p-2 border border-gray-300 rounded-lg resize-y"></textarea>
+                <input type="hidden" id="rating" name="rating" value="0">
+                <button type="button" onclick="submitReview({{ item.id }})" class="bg-orange-500 text-white py-2 px-6 rounded-full hover:bg-orange-600 transition duration-300">Kirim Ulasan</button>
+            </form>
+
+            <!-- Menampilkan Ulasan -->
+            <h3 class="text-orange-500 font-semibold mt-6">Ulasan Pengguna:</h3>
+            <div class="max-h-60 overflow-y-auto border border-gray-300 rounded-lg p-4">
+                {% if reviews %}
+                    <div class="space-y-4">
+                        {% for review in reviews %}
+                            <div class="p-2 bg-gray-100 rounded-lg border-l-4 border-orange-500">
+                                <p class="font-bold">{{ review.user.username }} rated: {{ review.rating }} / 5</p>
+                                <p>{{ review.review }}</p>
+                                <p class="text-gray-500 text-sm">{{ review.created_at|date:"Y-m-d H:i" }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-gray-700">Tidak ada ulasan untuk makanan ini.</p>
+                {% endif %}
             </div>
-        {% empty %}
-            <p class="text-gray-700">Tidak ada ulasan untuk makanan ini.</p>
-        {% endfor %}
+        </div>
     </div>
 
     <footer class="bg-orange-600 text-white text-center py-3 mt-8">
@@ -54,7 +67,7 @@ function setRating(rating) {
 function highlightStars(rating) {
     const stars = document.getElementById('rating-stars').children;
     for (let i = 0; i < stars.length; i++) {
-        stars[i].style.color = i < rating ? '#FF6600' : '#d1d5db'; // Mengubah warna bintang (orange untuk yang terpilih, abu-abu untuk yang tidak terpilih)
+        stars[i].style.color = i < rating ? '#FF6600' : '#d1d5db';
     }
 }
 
@@ -79,7 +92,7 @@ function submitReview(foodId) {
     .then(data => {
         if (data.status === 'success') {
             alert(data.message);
-            location.reload(); // Reload page to show the new review
+            location.reload();
         } else {
             alert(data.message);
         }
