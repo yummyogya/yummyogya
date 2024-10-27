@@ -1,30 +1,67 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
 {% include 'navbar.html' %}
-
-<div class="container mx-auto p-5">
-    <h1 class="text-3xl font-bold mb-5">Artikel Kuliner Yogyakarta</h1>
-    <div class="article-list space-y-5">
-        {% for article in articles %}
-            <article class="article-item flex items-center gap-5 p-5 border border-gray-300 rounded-lg shadow-md">
-                <div class="article-text flex-1">
-                    <h2 class="text-2xl font-semibold">{{ article.title }}</h2>
-                    <p class="publication-date text-sm text-gray-500">Diterbitkan pada {{ article.publication_date }}</p>
-                    <p class="content-preview text-base text-gray-700">{{ article.content|truncatewords:30 }}</p>
-                    <a href="{% url 'main:article_detail' article.id %}" class="read-more text-blue-600 font-bold">Baca Selengkapnya</a>
-                </div>
-                {% if article.image %}
-                    <img src="{{ article.image.url }}" alt="{{ article.title }}" class="article-image w-32 h-auto rounded-lg object-cover">
-                {% else %}
-                    <img src="{% static 'images/default-culinary.jpg' %}" alt="{{ article.title }}" class="article-image w-64 h-auto rounded-lg object-cover">
-                {% endif %}
-            </article>
-        {% empty %}
-            <p class="no-articles text-center text-lg text-gray-600">Tidak ada artikel yang ditemukan.</p>
+<div class="container mx-auto p-5 mt-20">
+    <h1 class="text-3xl font-bold mb-5 text-center text-orange-600">Artikel Kuliner Yogyakarta</h1>
+    <br>
+    <div id="article-list" class="article-list space-y-5">
+        {% for article in page_obj %}
+        <article class="article-item flex items-center gap-5 p-5 border border-gray-300 rounded-lg shadow-md">
+            <div class="article-text flex-1">
+                <h2 class="text-2xl font-semibold">{{ article.title }}</h2>
+                <p class="publication-date text-sm text-gray-500">Diterbitkan pada {{ article.published_date }}</p>
+                <p class="content-preview text-base text-gray-700">{{ article.content|truncatewords:30 }}</p>
+                <a href="{% url 'article:article_detail' article.id %}" class="read-more text-blue-600 font-bold">Baca Selengkapnya</a>
+            </div>
+            {% if article.image %}
+                <img src="{{ article.image }}" alt="{{ article.title }}" class="article-image w-32 h-auto rounded-lg object-cover">
+            {% else %}
+                <img src="{% static 'images/default-culinary.jpg' %}" alt="{{ article.title }}" class="article-image w-32 h-auto rounded-lg object-cover">
+            {% endif %}
+        </article>
         {% endfor %}
     </div>
+    {% if page_obj.has_next %}
+    <button id="load-more" class="mt-5 mb-5 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300" data-page="2">Load More</button>
+    {% endif %}
+    <br>
+    <a href="{% url 'main:show_main' %}" class="mb-5 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300">Back to Home</a>
 </div>
 
+<script>
+    document.getElementById('load-more').addEventListener('click', function() {
+        var button = this;
+        var page = button.getAttribute('data-page');
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '{% url "article:load_more_articles" %}?page=' + page, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var response = JSON.parse(xhr.responseText);
+                var articleList = document.getElementById('article-list');
+                response.articles.forEach(function(article) {
+                    var articleItem = document.createElement('article');
+                    articleItem.classList.add('article-item', 'flex', 'items-center', 'gap-5', 'p-5', 'border', 'border-gray-300', 'rounded-lg', 'shadow-md');
+                    articleItem.innerHTML = `
+                        <div class="article-text flex-1">
+                            <h2 class="text-2xl font-semibold">${article.title}</h2>
+                            <p class="publication-date text-sm text-gray-500">Diterbitkan pada ${article.published_date}</p>
+                            <p class="content-preview text-base text-gray-700">${article.content}</p>
+                            <a href="/article/${article.id}/" class="read-more text-blue-600 font-bold">Baca Selengkapnya</a>
+                        </div>
+                        ${article.image ? `<img src="${article.image}" alt="${article.title}" class="article-image w-32 h-auto rounded-lg object-cover">` : `<img src="{% static 'images/default-culinary.jpg' %}" alt="${article.title}" class="article-image w-32 h-auto rounded-lg object-cover">`}
+                    `;
+                    articleList.appendChild(articleItem);
+                });
+                if (response.has_next) {
+                    button.setAttribute('data-page', parseInt(page) + 1);
+                } else {
+                    button.remove();
+                }
+            }
+        };
+        xhr.send();
+    });
+</script>
 {% endblock content %}
