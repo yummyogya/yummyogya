@@ -50,8 +50,7 @@
                             <img src="https://static.vecteezy.com/system/resources/previews/000/367/368/original/star-vector-icon.jpg" alt="Star icon" class="w-4 h-4 mr-2">
                             {{ food.rating|floatformat:1 }} / 5
                         </div>
-
-                         <!-- Tambahkan margin bottom pada tombol -->
+                        
                          <div class="card-buttons mt-4 mb-2 flex justify-between">
                             <a href="{% url 'dashboard:edit_food' food.pk %}" class="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 flex items-center">
                                 <img src="https://icon-library.com/images/edit-svg-icon/edit-svg-icon-22.jpg" alt="Edit" class="w-4 h-4 mr-1"> Edit

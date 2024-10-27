@@ -1,4 +1,3 @@
-# Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Food
 from django.contrib.auth.decorators import login_required
@@ -8,13 +7,13 @@ from django.http import JsonResponse
 
 @login_required
 def dashboard(request):
-    sort_by = request.GET.get('sort_by', 'price')  # Default ke 'price'
-    sort_order = request.GET.get('sort_order', 'asc')  # Default ke 'asc' (urutan naik)
+    sort_by = request.GET.get('sort_by', 'price')  
+    sort_order = request.GET.get('sort_order', 'asc')  
 
-    # Tentukan urutan berdasarkan sort_by dan sort_order
+
     if sort_by == 'name':
         foods = Food.objects.filter(created_by=request.user).order_by('name' if sort_order == 'asc' else '-name')
-    else:  # Default ke pengurutan berdasarkan harga
+    else: 
         foods = Food.objects.filter(created_by=request.user).order_by('price' if sort_order == 'asc' else '-price')
 
     return render(request, 'dashboard.html', {'foods': foods, 'sort_by': sort_by, 'sort_order': sort_order})
@@ -39,14 +38,13 @@ def add_food(request):
                     'message': 'Food added successfully!',
                 })
             return redirect('dashboard:dashboard')
-            
-            # Redirect ke dashboard setelah makanan ditambah
+    
     else:
         form = FoodForm()
     
     return render(request, 'add_food.html', {'form': form})
 
-
+# Edit Food AJAX 
 @login_required
 def edit_food(request, pk):
     food = get_object_or_404(Food, pk=pk, created_by=request.user)
@@ -71,6 +69,6 @@ def edit_food(request, pk):
 
 @login_required
 def delete_food(request, pk):
-    food = get_object_or_404(Food, pk=pk)  # Ini akan mengembalikan 404 jika tidak ada
+    food = get_object_or_404(Food, pk=pk)  
     food.delete()
     return redirect('dashboard:dashboard')  

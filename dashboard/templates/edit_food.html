@@ -49,7 +49,7 @@
             box-shadow: 0 0 5px rgba(230, 126, 34, 0.5);
         }
         button {
-            display: block; /* Makes the button a block element */
+            display: block; 
             margin: 0 auto;
             width: 200px;
             padding: 10px;
@@ -126,7 +126,7 @@
                     success: function(response) {
                         $('#success-message').text(response.message).fadeIn();
                         $('#error-message').fadeOut();
-                        // Optionally redirect or update UI
+                      
                     },
                     error: function(xhr, status, error) {
                         $('#error-message').text('Terjadi kesalahan. Silakan coba lagi.').fadeIn();
