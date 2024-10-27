@@ -32,37 +32,5 @@
     {% block content %} 
     {% endblock content %}
 
-    <!-- Wishlist Add Script -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const wishlistButtons = document.querySelectorAll('.add-to-wishlist');
-
-        wishlistButtons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                event.preventDefault();
-                const foodId = this.dataset.id;
-                
-                // Send AJAX request
-                fetch(`/wishlist/add/${foodId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ food_id: foodId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.wishlist_count) {
-                        const wishlistCounter = document.querySelector('.wishlist-counter');
-                        wishlistCounter.textContent = data.wishlist_count;
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        });
-    });
-    </script>
-
   </body>
 </html>
