@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from main.views import show_main,search_ajax, show_xml, show_json, show_json_by_id, show_xml_by_id
 from details.views import food_detail, add_review
 from article.views import article_detail, article_list
@@ -16,4 +16,5 @@ urlpatterns = [
     path('details/add_review/', add_review, name='add_review'),
     path('article/', article_list, name='article_list'),
     path('article/<int:id>/', article_detail, name='article_detail'),
+    path('authentication/', include('authentication.urls')),  # Include URLs dari modul authentication
 ]
