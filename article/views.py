@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.http import HttpResponseForbidden
 
 # show article
 def article_list(request):
@@ -69,3 +70,32 @@ def create_article_ajax(request):
         return JsonResponse({'article': data})
     else:
         return JsonResponse({'error': 'Invalid request'}, status=400)
+
+login_required
+def edit_article(request, id):
+    article_entry = get_object_or_404(ArticleEntry, id=id)
+    if article_entry.user != request.user:
+        return HttpResponseForbidden("Anda tidak diizinkan untuk mengedit artikel ini.")
+
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, instance=article_entry)
+        if form.is_valid():
+            form.save()
+            return redirect('article:article_list')
+    else:
+        form = ArticleForm(instance=article_entry)
+
+    return render(request, 'edit_article.html', {'form': form})
+
+# View untuk menghapus artikel
+@login_required
+def delete_article(request, id):
+    article_entry = get_object_or_404(ArticleEntry, id=id)
+    if article_entry.user != request.user:
+        return HttpResponseForbidden("Anda tidak diizinkan untuk menghapus artikel ini.")
+
+    if request.method == 'POST':
+        article_entry.delete()
+        return redirect('article:article_list')
+
+    return render(request, 'confirm_delete.html', {'article_entry': article_entry})

@@ -1,5 +1,6 @@
 from django.urls import path
 from article.views import article_list, create_article, show_xml, show_json, show_json_by_id, show_xml_by_id, article_detail, create_article_ajax
+from article.views import edit_article, delete_article
 
 app_name = 'article'
 
@@ -13,4 +14,6 @@ urlpatterns = [
     path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
     path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
     path('create-ajax/', create_article_ajax, name='create_article_ajax'),
+    path('edit/<uuid:id>/', edit_article, name='edit_article'),
+    path('delete/<uuid:id>/', delete_article, name='delete_article'),
 ]
