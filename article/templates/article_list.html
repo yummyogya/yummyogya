@@ -1,67 +1,157 @@
+<!-- article/templates/article_list.html -->
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
 {% include 'navbar.html' %}
-<div class="container mx-auto p-5 mt-20">
-    <h1 class="text-3xl font-bold mb-5 text-center text-orange-600">Artikel Kuliner Yogyakarta</h1>
-    <br>
-    <div id="article-list" class="article-list space-y-5">
-        {% for article in page_obj %}
-        <article class="article-item flex items-center gap-5 p-5 border border-gray-300 rounded-lg shadow-md">
-            <div class="article-text flex-1">
-                <h2 class="text-2xl font-semibold">{{ article.title }}</h2>
-                <p class="publication-date text-sm text-gray-500">Diterbitkan pada {{ article.published_date }}</p>
-                <p class="content-preview text-base text-gray-700">{{ article.content|truncatewords:30 }}</p>
-                <a href="{% url 'article:article_detail' article.id %}" class="read-more text-blue-600 font-bold">Baca Selengkapnya</a>
-            </div>
-            {% if article.image %}
-                <img src="{{ article.image }}" alt="{{ article.title }}" class="article-image w-32 h-auto rounded-lg object-cover">
-            {% else %}
-                <img src="{% static 'images/default-culinary.jpg' %}" alt="{{ article.title }}" class="article-image w-32 h-auto rounded-lg object-cover">
-            {% endif %}
-        </article>
-        {% endfor %}
-    </div>
-    {% if page_obj.has_next %}
-    <button id="load-more" class="mt-5 mb-5 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition duration-300" data-page="2">Load More</button>
-    {% endif %}
-    <br>
-    <a href="{% url 'main:show_main' %}" class="mb-5 inline-block px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition duration-300">Back to Home</a>
-</div>
 
+<div class="container mx-auto p-5 mt-20">
+    <h1 class="text-3xl font-bold mb-5 text-center text-orange-600">Artikel Anda</h1>
+    <div id="articles-container" class="space-y-5">
+        {% if article_entries %}
+            {% for article_entry in article_entries %}
+                <article class="bg-white p-5 rounded-lg shadow-md flex items-start">
+                    {% if article_entry.image_url %}
+                        <img src="{{ article_entry.image_url }}" alt="{{ article_entry.title }}" class="w-32 h-32 object-cover rounded-lg mr-5">
+                    {% else %}
+                        <img src="{% static 'images/default-culinary.jpg' %}" alt="{{ article_entry.title }}" class="w-32 h-32 object-cover rounded-lg mr-5">
+                    {% endif %}
+                    <div>
+                        <h2 class="text-2xl font-bold">{{ article_entry.title }}</h2>
+                        <p class="text-gray-600 text-sm mb-2">Diterbitkan pada {{ article_entry.published_date|date:"d M Y" }}</p>
+                        <p class="text-gray-800 mb-2">{{ article_entry.content|truncatewords:30 }}</p>
+                        <a href="{% url 'article:article_detail' article_entry.id %}" class="text-orange-600 font-semibold">Baca Selengkapnya</a>
+                    </div>
+                </article>
+            {% endfor %}
+        {% else %}
+            <p class="text-center text-gray-600">Belum ada artikel yang Anda buat.</p>
+        {% endif %}
+    </div>
+    <br>
+    {% if user.is_authenticated %}
+        <div class="bg-white p-5 rounded-lg shadow-md mb-5">
+            <h2 class="text-2xl font-bold mb-4">Tambah Artikel Baru</h2>
+            <form id="article-form">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="title" class="block text-gray-700 font-semibold mb-2">Judul</label>
+                    <input type="text" id="title" name="title" class="w-full p-2 border border-gray-300 rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="content" class="block text-gray-700 font-semibold mb-2">Konten</label>
+                    <textarea id="content" name="content" rows="5" class="w-full p-2 border border-gray-300 rounded" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="image_url" class="block text-gray-700 font-semibold mb-2">URL Gambar (opsional)</label>
+                    <input type="url" id="image_url" name="image_url" class="w-full p-2 border border-gray-300 rounded">
+                </div>
+                <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition duration-300">
+                    Tambah Artikel
+                </button>
+                <div id="success-message" class="bg-green-100 text-green-800 p-4 rounded mb-4 hidden">
+                    Artikel berhasil ditambahkan!
+                </div>
+            </form>
+        </div>
+    {% endif %}
+</div>
 <script>
-    document.getElementById('load-more').addEventListener('click', function() {
-        var button = this;
-        var page = button.getAttribute('data-page');
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '{% url "article:load_more_articles" %}?page=' + page, true);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                var response = JSON.parse(xhr.responseText);
-                var articleList = document.getElementById('article-list');
-                response.articles.forEach(function(article) {
-                    var articleItem = document.createElement('article');
-                    articleItem.classList.add('article-item', 'flex', 'items-center', 'gap-5', 'p-5', 'border', 'border-gray-300', 'rounded-lg', 'shadow-md');
-                    articleItem.innerHTML = `
-                        <div class="article-text flex-1">
-                            <h2 class="text-2xl font-semibold">${article.title}</h2>
-                            <p class="publication-date text-sm text-gray-500">Diterbitkan pada ${article.published_date}</p>
-                            <p class="content-preview text-base text-gray-700">${article.content}</p>
-                            <a href="/article/${article.id}/" class="read-more text-blue-600 font-bold">Baca Selengkapnya</a>
-                        </div>
-                        ${article.image ? `<img src="${article.image}" alt="${article.title}" class="article-image w-32 h-auto rounded-lg object-cover">` : `<img src="{% static 'images/default-culinary.jpg' %}" alt="${article.title}" class="article-image w-32 h-auto rounded-lg object-cover">`}
-                    `;
-                    articleList.appendChild(articleItem);
-                });
-                if (response.has_next) {
-                    button.setAttribute('data-page', parseInt(page) + 1);
-                } else {
-                    button.remove();
+    // Fungsi untuk mendapatkan CSRF token dari cookie
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const trimmedCookie = cookie.trim();
+                if (trimmedCookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(trimmedCookie.substring(name.length + 1));
+                    break;
                 }
             }
-        };
-        xhr.send();
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+// Event listener untuk form submit
+    document.getElementById('article-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Mencegah form submit default
+
+        // Ambil data dari form
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+        const image_url = document.getElementById('image_url').value;
+
+        // Siapkan data untuk dikirim
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append('image_url', image_url);
+
+        // Kirim data menggunakan fetch
+        fetch("{% url 'article:create_article_ajax' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            credentials: 'same-origin',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.article) {
+                const articleData = JSON.parse(data.article)[0];
+                const article = articleData.fields;
+
+                // Dapatkan tanggal publikasi dalam format yang sesuai
+                const publishedDate = new Date(article.published_date).toLocaleDateString('id-ID', {
+                    day: 'numeric', month: 'long', year: 'numeric'
+                });
+
+                // Buat URL detail artikel
+                const articleDetailURL = `/article/${articleData.pk}/`;
+
+                // Buat elemen artikel baru
+                const articleHTML = `
+                <article class="bg-white p-5 rounded-lg shadow-md flex items-start">
+                    ${article.image_url ? `
+                    <img src="${article.image_url}" alt="${article.title}" class="w-32 h-32 object-cover rounded-lg mr-5">
+                    ` : `
+                    <img src="{% static 'images/default-culinary.jpg' %}" alt="${article.title}" class="w-32 h-32 object-cover rounded-lg mr-5">
+                    `}
+                    <div>
+                        <h2 class="text-2xl font-bold">${article.title}</h2>
+                        <p class="text-gray-600 text-sm mb-2">Diterbitkan pada ${publishedDate}</p>
+                        <p class="text-gray-800 mb-2">${article.content}</p>
+                        <a href="${articleDetailURL}" class="text-orange-600 font-semibold">Baca Selengkapnya</a>
+                    </div>
+                </article>
+                `;
+
+                // Tambahkan artikel baru ke dalam container
+                const articlesContainer = document.getElementById('articles-container');
+                articlesContainer.insertAdjacentHTML('afterbegin', articleHTML);
+
+                // Tampilkan pesan sukses
+                const successMessage = document.getElementById('success-message');
+                successMessage.classList.remove('hidden');
+
+                // Sembunyikan pesan sukses setelah beberapa detik
+                setTimeout(() => {
+                    successMessage.classList.add('hidden');
+                }, 3000);
+
+                // Reset form
+                document.getElementById('article-form').reset();
+            } else {
+                alert('Gagal menambah artikel. Silakan coba lagi.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan. Silakan coba lagi.');
+        });
     });
-</script>
+    </script>
 {% endblock content %}
