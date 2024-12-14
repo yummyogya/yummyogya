@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure-vt(=@#j5u198&3wkr0!ovbc)2(r!!&fgs5y&+x0(6lbl1(rs7(
 PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "david-juan-yummyogya.pbp.cs.ui.ac.id", "10.0.2.2"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "david-juan-yummyogya.pbp.cs.ui.ac.id", "10.0.2.2", 'localhost:55906',
+    '127.0.0.1:55906']
 
 
 # Application definition
@@ -151,3 +152,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:53345',  # Tambahkan origin yang sesuai dengan frontend Anda
+]
+
