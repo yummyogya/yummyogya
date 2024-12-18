@@ -34,3 +34,12 @@ def remove_from_wishlist(request, food_id):
     wishlist.food.remove(food)
     messages.success(request, f'{food.nama} has been removed from your wishlist.')
     return redirect('wishlist:view_wishlist')
+
+@login_required
+def get_wishlist_json(request):
+    try:
+        wishlist = Wishlist.objects.get(user=request.user)
+        foods = wishlist.food.all().values('id', 'nama', 'harga', 'deskripsi', 'rating', 'gambar')
+        return JsonResponse(list(foods), safe=False)  
+    except Wishlist.DoesNotExist:
+        return JsonResponse({'error': 'Wishlist not found'}, status=404)

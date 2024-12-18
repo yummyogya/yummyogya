@@ -1,11 +1,13 @@
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.core import serializers
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 from .models import Makanan
 from dashboard.models import Food
 
+@login_required
 def show_main(request):
     query = request.GET.get('q')
 
@@ -37,6 +39,7 @@ def show_main(request):
 
 
 # Fungsi untuk handling request AJAX
+# @login_required
 def search_ajax(request):
     query = request.GET.get('q', '')
     page_number = request.GET.get('page', 1)  # Get the requested page number, default to 1

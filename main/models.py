@@ -1,18 +1,6 @@
 import uuid
 from django.db import models
 
-# Model untuk Artikel
-class Artikel(models.Model):
-    judul = models.CharField(max_length=255)  # Judul artikel
-    konten = models.TextField()  # Isi artikel
-    tanggal_publikasi = models.DateField(auto_now_add=True)  # Tanggal publikasi otomatis saat artikel dibuat
-
-    class Meta:
-        ordering = ['-tanggal_publikasi']  # Artikel terbaru muncul pertama
- 
-    def __str__(self):
-        return self.judul
-
 # Model untuk Makanan
 class Makanan(models.Model):
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # tambahkan baris ini
