@@ -13,6 +13,7 @@ import json
 from django.contrib.auth import authenticate, login as auth_login
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 @csrf_exempt
 def login_flutter(request):
@@ -78,6 +79,21 @@ def register_flutter(request):
             "status": False,
             "message": "Invalid request method."
         }, status=400)
+    
+@csrf_exempt
+@login_required
+def logout_flutter(request):
+    if request.method == 'POST':
+        # Logout pengguna
+        logout(request)
+        return JsonResponse({
+            "status": True,
+            "message": "Logout berhasil."
+        }, status=200)
+    return JsonResponse({
+        "status": False,
+        "message": "Invalid request method."
+    }, status=405)
 
 
 def register(request):
