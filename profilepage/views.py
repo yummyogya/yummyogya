@@ -7,6 +7,8 @@ from wishlist.models import Wishlist
 from details.models import Review
 from django.http import JsonResponse
 from .models import Profile
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 # Create your views here.
 
@@ -64,3 +66,89 @@ def change_password(request):
         else:
             return JsonResponse({'success': False, 'errors': password_form.errors})
     return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+@login_required
+def get_profile_flutter(request):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    wishlist_items = Wishlist.objects.filter(user=user).first().food.all()[:3]
+    
+    # Menyusun data wishlist
+    wishlist = [
+        {
+            "id": item.id,
+            "name": item.nama,
+            "price": item.harga,
+            "image": item.gambar.url if item.gambar else None,
+        }
+        for item in wishlist_items
+    ]
+
+    # Menyusun data review
+    reviews = Review.objects.filter(user=user).order_by('-created_at')
+    review_data = [
+        {
+            "id": review.id,
+            "food_name": review.food.nama if review.food else "Tidak ada",
+            "rating": review.rating,
+            "review": review.review,
+            "date": review.created_at.strftime("%Y-%m-%d"),
+        }
+        for review in reviews
+    ]
+
+    data = {
+        "username": user.username,
+        "email": user.email,
+        "date_joined": user.date_joined.strftime("%Y-%m-%d"),
+        "last_login": request.COOKIES.get('last_login', 'Not available'),
+        "bio": profile.bio,
+        "profile_photo": profile.profile_photo.url if profile.profile_photo else None,
+        "wishlist": wishlist,
+        "reviews": review_data,
+    }
+    return JsonResponse(data, safe=False)
+
+@csrf_exempt
+@login_required
+def update_profile_flutter(request):
+    if request.method == 'POST':
+        profile = Profile.objects.get(user=request.user)
+        data = json.loads(request.body)
+
+        bio = data.get('bio', None)
+        delete_photo = data.get('delete_photo', False)
+
+        if bio is not None:
+            profile.bio = bio
+
+        if delete_photo:
+            profile.profile_photo.delete()
+
+        profile.save()
+
+        return JsonResponse({"success": True, "message": "Profile updated successfully."})
+
+    return JsonResponse({"success": False, "message": "Invalid request method."})
+
+@csrf_exempt
+@login_required
+def change_password_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        old_password = data.get('old_password')
+        new_password1 = data.get('new_password1')
+        new_password2 = data.get('new_password2')
+
+        if new_password1 != new_password2:
+            return JsonResponse({"success": False, "message": "Passwords do not match."})
+
+        user = request.user
+        if not user.check_password(old_password):
+            return JsonResponse({"success": False, "message": "Old password is incorrect."})
+
+        user.set_password(new_password1)
+        user.save()
+        return JsonResponse({"success": True, "message": "Password changed successfully."})
+
+    return JsonResponse({"success": False, "message": "Invalid request method."})
