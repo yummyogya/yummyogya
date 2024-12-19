@@ -81,19 +81,11 @@ def register_flutter(request):
         }, status=400)
     
 @csrf_exempt
-@login_required
 def logout_flutter(request):
     if request.method == 'POST':
-        # Logout pengguna
         logout(request)
-        return JsonResponse({
-            "status": True,
-            "message": "Logout berhasil."
-        }, status=200)
-    return JsonResponse({
-        "status": False,
-        "message": "Invalid request method."
-    }, status=405)
+        return JsonResponse({"status": True, "message": "Logout berhasil."}, status=200)
+    return JsonResponse({"status": False, "message": "Metode tidak diizinkan."}, status=405)
 
 
 def register(request):
