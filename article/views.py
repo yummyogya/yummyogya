@@ -114,6 +114,6 @@ def create_article_flutter(request):
         )
 
         new_article.save()
-        return JsonResponse({'message': 'Article created successfully!'}, status=200)
+        return JsonResponse({'status': 'success'}, status=200)
     else:
-        return JsonResponse({'error': 'Invalid request'}, status=401)
+        return JsonResponse({'status': 'error'}, status=401)
