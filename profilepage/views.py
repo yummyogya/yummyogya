@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from .forms import ProfileUpdateForm 
 from django.contrib.auth import update_session_auth_hash
-from wishlist.models import Wishlist
+from wishlist.models import Wishlist, WishlistItem
 from details.models import Review
 from django.http import JsonResponse
 from .models import Profile
@@ -17,8 +17,9 @@ def show_profile(request):
     user = request.user
     # Fetch or create the wishlist for the user
     wishlist, created = Wishlist.objects.get_or_create(user=user)
-    wishlist_items = wishlist.food.all()[:3]
-    profile, created = Profile.objects.get_or_create(user=user)  # Buat profil jika belum ada
+    wishlist_items = WishlistItem.objects.filter(wishlist=wishlist)[:3]
+    food_items = [item.food for item in wishlist_items]
+    profile, created = Profile.objects.get_or_create(user=user)  
     last_login = request.COOKIES.get('last_login', 'Not available')
 
     order = request.GET.get('order', 'latest')
@@ -30,7 +31,7 @@ def show_profile(request):
     context = {
         'user': user,
         'profile_form': ProfileUpdateForm(instance=profile),
-        'wishlist_items': wishlist_items,
+        'food_items': food_items,
         'reviews': reviews,
         'last_login': last_login,
     }
