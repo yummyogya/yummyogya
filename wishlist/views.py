@@ -9,6 +9,22 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import Wishlist
+
+@csrf_exempt
+def remove_from_wishlist(request, food_id):
+    if request.method == 'DELETE':
+        try:
+            wishlist_item = Makanan.objects.get(id=food_id)
+            wishlist_item.delete()
+            return JsonResponse({"message": "Item successfully removed"}, status=200)
+        except Wishlist.DoesNotExist:
+            return JsonResponse({"error": "Wishlist item not found"}, status=404)
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+
 @login_required
 def add_to_wishlist(request, food_id):
     if request.method == 'POST':
@@ -69,20 +85,6 @@ def view_wishlist(request):
     return render(request, 'wishlist.html', context)
 
 @login_required
-def remove_from_wishlist(request, food_id):
-    food = Makanan.objects.filter(id=food_id).first()
-    
-    if food is None:
-        messages.error(request, "Food item not found.")
-        return redirect('wishlist:view_wishlist')
-
-    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-    WishlistItem.objects.filter(wishlist=wishlist, food=food).delete()
-    
-    messages.success(request, f'{food.nama} has been removed from your wishlist.')
-    return redirect('wishlist:view_wishlist')
-
-@login_required
 def update_wishlist_item_notes(request, food_id):
     if request.method == 'POST':
         food = get_object_or_404(Makanan, id=food_id)
@@ -106,6 +108,7 @@ def update_wishlist_item_notes(request, food_id):
 
 def get_wishlist_json(request):
     username = request.GET.get('username') 
+    print(f"Received username: {username}")
 
     if not username:
         return JsonResponse({'error': 'Username is required'}, status=400)
