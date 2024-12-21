@@ -10,4 +10,5 @@ urlpatterns = [
     path('wishlist/get_wishlist/', views.get_wishlist_json, name='get_wishlist'),
     path('wishlist/remove-from-wishlist/<int:food_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
     path('wishlist/update-notes/<int:food_id>/', views.update_wishlist_item_notes, name='update_wishlist_item_notes'),
+    path('wishlist/remove-wishlist/<int:food_id>/', views.remove_wishlist, name='remove_wishlist'),
 ]

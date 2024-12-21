@@ -228,7 +228,7 @@
                             <p class="price">Harga: Rp {{ food.harga }}</p>
                             <p class="description">{{ food.deskripsi|truncatewords:10 }}</p>
                             <p class="rating">Rating: {{ food.rating }} / 5</p>
-                            <a href="{% url 'wishlist:remove_from_wishlist' food.id %}" class="btn-remove">Remove</a>
+                            <a href="{% url 'wishlist:remove_wishlist' food.id %}" class="btn-remove">Remove</a>
                             
                             <!-- Notes Section -->
                             <div class="notes-section">

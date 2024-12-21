@@ -24,6 +24,18 @@ def remove_from_wishlist(request, food_id):
             return JsonResponse({"error": "Wishlist item not found"}, status=404)
     return JsonResponse({"error": "Invalid request method"}, status=400)
 
+@login_required
+def remove_wishlist(request, food_id):
+    food = Makanan.objects.filter(id=food_id).first()
+    
+    if food is None:
+        messages.error(request, "Food item not found.")
+        return redirect('wishlist:view_wishlist')
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+    WishlistItem.objects.filter(wishlist=wishlist, food=food).delete()
+    
+    messages.success(request, f'{food.nama} has been removed from your wishlist.')
+    return redirect('wishlist:view_wishlist')
 
 @login_required
 def add_to_wishlist(request, food_id):
