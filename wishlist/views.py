@@ -5,6 +5,9 @@ from .forms import WishlistItemNotesForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
+from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 @login_required
 def add_to_wishlist(request, food_id):
@@ -18,6 +21,39 @@ def add_to_wishlist(request, food_id):
     
         wishlist_count = wishlist.items.count()
         return JsonResponse({'wishlist_count': wishlist_count})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+@csrf_exempt
+def add_to_wishlist_flutter(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)  
+            username = data.get('username')
+            food_id = data.get('food_id')
+
+            if not username or not food_id:
+                return JsonResponse({'error': 'Username and Food ID are required'}, status=400)
+
+            user = User.objects.filter(username=username).first()
+            if not user:
+                return JsonResponse({'error': 'User not found'}, status=404)
+
+            food_item = Makanan.objects.filter(id=food_id).first()
+            if not food_item:
+                return JsonResponse({'error': 'Food item not found'}, status=404)
+
+            wishlist, created = Wishlist.objects.get_or_create(user=user)
+            wishlist_item, item_created = WishlistItem.objects.get_or_create(
+                wishlist=wishlist,
+                food=food_item
+            )
+
+            wishlist_count = WishlistItem.objects.filter(wishlist=wishlist).count()
+            return JsonResponse({'message': 'Item added to wishlist', 'wishlist_count': wishlist_count})
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @login_required
@@ -68,25 +104,32 @@ def update_wishlist_item_notes(request, food_id):
     
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-@login_required
 def get_wishlist_json(request):
+    username = request.GET.get('username') 
+
+    if not username:
+        return JsonResponse({'error': 'Username is required'}, status=400)
+
+    user = User.objects.filter(username=username).first()
+    if not user:
+        return JsonResponse({'error': 'User not found'}, status=404)
+
     try:
-        wishlist = Wishlist.objects.get(user=request.user)
+        wishlist = Wishlist.objects.get(user=user)
         wishlist_items = WishlistItem.objects.filter(wishlist=wishlist)
-        
-        foods_data = []
-        for item in wishlist_items:
-            food_data = {
+
+        data = [
+            {
                 'id': item.food.id,
                 'nama': item.food.nama,
                 'harga': item.food.harga,
                 'deskripsi': item.food.deskripsi,
                 'rating': item.food.rating,
                 'gambar': item.food.gambar,
-                'notes': item.notes
+                'notes': item.notes,
             }
-            foods_data.append(food_data)
-        
-        return JsonResponse(foods_data, safe=False)  
+            for item in wishlist_items
+        ]
+        return JsonResponse(data, safe=False)
     except Wishlist.DoesNotExist:
         return JsonResponse({'error': 'Wishlist not found'}, status=404)
