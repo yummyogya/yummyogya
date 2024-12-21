@@ -11,6 +11,8 @@ from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import HttpResponseForbidden
+import json
+from django.http import JsonResponse
 
 # show article
 def article_list(request):
@@ -99,3 +101,19 @@ def delete_article(request, id):
         return redirect('article:article_list')
 
     return render(request, 'confirm_delete.html', {'article_entry': article_entry})
+
+@csrf_exempt
+def create_article_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        new_article = ArticleEntry.objects.create(
+            user=request.user,
+            title=data['title'],
+            content=data['content'],
+            image_url=data['image_url'],
+        )
+
+        new_article.save()
+        return JsonResponse({'status': 'success'}, status=200)
+    else:
+        return JsonResponse({'status': 'error'}, status=401)
