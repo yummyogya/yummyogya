@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from .forms import ProfileUpdateForm 
@@ -9,6 +10,7 @@ from django.http import JsonResponse
 from .models import Profile
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -68,47 +70,55 @@ def change_password(request):
             return JsonResponse({'success': False, 'errors': password_form.errors})
     return JsonResponse({'success': False, 'error': 'Invalid request'})
 
-@login_required
+
+@csrf_exempt
 def get_profile_flutter(request):
-    user = request.user
-    profile = Profile.objects.get(user=user)
-    wishlist_items = Wishlist.objects.filter(user=user).first().food.all()[:3]
-    
-    # Menyusun data wishlist
-    wishlist = [
-        {
-            "id": item.id,
-            "name": item.nama,
-            "price": item.harga,
-            "image": item.gambar.url if item.gambar else None,
-        }
-        for item in wishlist_items
-    ]
+    try:
+        username = request.GET.get('username')
+        if not username:
+            return JsonResponse({"status": "error", "message": "Username is required"}, status=400)
 
-    # Menyusun data review
-    reviews = Review.objects.filter(user=user).order_by('-created_at')
-    review_data = [
-        {
-            "id": review.id,
-            "food_name": review.food.nama if review.food else "Tidak ada",
-            "rating": review.rating,
-            "review": review.review,
-            "date": review.created_at.strftime("%Y-%m-%d"),
-        }
-        for review in reviews
-    ]
+        user = get_object_or_404(User, username=username)
+        profile, _ = Profile.objects.get_or_create(user=user)
 
-    data = {
-        "username": user.username,
-        "email": user.email,
-        "date_joined": user.date_joined.strftime("%Y-%m-%d"),
-        "last_login": request.COOKIES.get('last_login', 'Not available'),
-        "bio": profile.bio,
-        "profile_photo": profile.profile_photo.url if profile.profile_photo else None,
-        "wishlist": wishlist,
-        "reviews": review_data,
-    }
-    return JsonResponse(data, safe=False)
+        wishlist, _ = Wishlist.objects.get_or_create(user=user)
+        wishlist_items = WishlistItem.objects.filter(wishlist=wishlist)[:3]
+        food_items = [
+            {
+                "id": item.food.id,
+                "name": item.food.nama,
+                "price": item.food.harga,
+                "image": item.food.gambar,
+            }
+            for item in wishlist_items
+        ]
+
+        reviews = Review.objects.filter(user=user).order_by('-created_at')[:3]
+        review_data = [
+            {
+                "id": review.id,
+                "food_name": review.food.nama if review.food else "Tidak ada",
+                "rating": review.rating,
+                "review": review.review,
+                "date": review.created_at.strftime("%Y-%m-%d"),
+            }
+            for review in reviews
+        ]
+
+        data = {
+            "username": user.username,
+            "email": user.email,
+            "date_joined": user.date_joined.strftime("%Y-%m-%d"),
+            "last_login": user.last_login.strftime("%Y-%m-%d %H:%M:%S") if user.last_login else "Not available",
+            "bio": profile.bio,
+            "profile_photo": profile.profile_photo.url if profile.profile_photo else None,
+            "wishlist": food_items,
+            "reviews": review_data,
+        }
+
+        return JsonResponse({"status": "success", "data": data}, safe=False)
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
 
 @csrf_exempt
 @login_required
