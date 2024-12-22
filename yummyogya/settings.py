@@ -155,6 +155,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:53345',
     'http://127.0.0.1:8000',  
-    'http://localhost:50706', 
+    'http://localhost:50706',
+    'https://david-juan-yummyogya.pbp.cs.ui.ac.id'
 ]
 
