@@ -97,32 +97,29 @@ def view_wishlist(request):
     return render(request, 'wishlist.html', context)
 
 @csrf_exempt
+@login_required
 def update_wishlist_item_notes(request, food_id):
     if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            username = data.get('username')
-            notes = data.get('notes', '')
+        food = get_object_or_404(Makanan, id=food_id)
+        wishlist, created = Wishlist.objects.get_or_create(user=request.user)
 
-            user = User.objects.filter(username=username).first()
-            if not user:
-                return JsonResponse({'error': 'User not found'}, status=404)
+        wishlist_item, created = WishlistItem.objects.get_or_create(
+            wishlist=wishlist,
+            food=food
+        )
 
-            food = get_object_or_404(Makanan, id=food_id)
-            wishlist, created = Wishlist.objects.get_or_create(user=user)
+        # Use the form to update the notes
+        form = WishlistItemNotesForm(request.POST, instance=wishlist_item)
+        if form.is_valid():
+            form.save()
+            # Return a success message in JSON format
+            return JsonResponse({'message': 'Notes updated successfully.'}, status=200)
+        else:
+            # Return an error message in JSON format
+            return JsonResponse({'error': 'Error updating notes.'}, status=400)
 
-            wishlist_item, created = WishlistItem.objects.get_or_create(
-                wishlist=wishlist, 
-                food=food
-            )
-
-            wishlist_item.notes = notes
-            wishlist_item.save()
-            return JsonResponse({'message': 'Notes updated successfully'}, status=200)
-
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+    # Return a 400 status if the request is not a POST
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 def get_wishlist_json(request):
     username = request.GET.get('username') 
