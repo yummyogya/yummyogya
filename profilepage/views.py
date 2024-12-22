@@ -93,11 +93,12 @@ def get_profile_flutter(request):
             for item in wishlist_items
         ]
 
-        reviews = Review.objects.filter(user=user).order_by('-created_at')[:3]
+        reviews = Review.objects.filter(user=user).order_by('-created_at')
         review_data = [
             {
                 "id": review.id,
                 "food_name": review.food.nama if review.food else "Tidak ada",
+                "food_id": review.food.id if review.food else "",
                 "rating": review.rating,
                 "review": review.review,
                 "date": review.created_at.strftime("%Y-%m-%d"),
