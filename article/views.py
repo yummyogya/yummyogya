@@ -106,14 +106,93 @@ def delete_article(request, id):
 def create_article_flutter(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        new_article = ArticleEntry.objects.create(
-            user=request.user,
-            title=data['title'],
-            content=data['content'],
-            image_url=data['image_url'],
-        )
+        user = request.user if request.user.is_authenticated else None
 
+        new_article = ArticleEntry.objects.create(
+            user=user,  # atau None jika belum login
+            title=data.get('title', ''),
+            content=data.get('content', ''),
+            image_url=data.get('image_url', '') or None,
+        )
         new_article.save()
-        return JsonResponse({'status': 'success'}, status=200)
+
+        return JsonResponse({"status": "success"}, status=200)
     else:
-        return JsonResponse({'status': 'error'}, status=401)
+        return JsonResponse({"status": "error"}, status=401)
+    
+@csrf_exempt
+def delete_article_flutter(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            article_id = data.get('id', None)
+
+            if not article_id:
+                return JsonResponse({"status": "error", "message": "ID artikel diperlukan."}, status=400)
+
+            article = ArticleEntry.objects.filter(id=article_id).first()
+
+            if article is None:
+                return JsonResponse({"status": "error", "message": "Artikel tidak ditemukan."}, status=404)
+
+            article.delete()
+            return JsonResponse({"status": "success", "message": "Artikel berhasil dihapus."}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON."}, status=400)
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+    else:
+        return JsonResponse({"status": "error", "message": "Hanya menerima POST request."}, status=405)
+
+@csrf_exempt
+def edit_article_flutter(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            article_id = data.get('id', None)
+
+            if not article_id:
+                return JsonResponse({"status": "error", "message": "ID artikel diperlukan."}, status=400)
+
+            article = ArticleEntry.objects.filter(id=article_id).first()
+
+            if article is None:
+                return JsonResponse({"status": "error", "message": "Artikel tidak ditemukan."}, status=404)
+
+            # Update field jika ada dalam data
+            title = data.get('title', '').strip()
+            content = data.get('content', '').strip()
+            image_url = data.get('image_url', '').strip()
+
+            if title:
+                article.title = title
+            if content:
+                article.content = content
+            if image_url:
+                article.image_url = image_url
+            elif 'image_url' in data and not image_url:
+                # Jika 'image_url' disertakan dan kosong, hapus URL gambar
+                article.image_url = None
+
+            article.save()
+
+            article_data = {
+                'id': article.id,
+                'title': article.title,
+                'content': article.content,
+                'image_url': article.image_url,
+                'published_date': article.published_date,
+                'user': article.user.username if article.user else None,
+            }
+
+            return JsonResponse({
+                "status": "success",
+                "message": "Artikel berhasil diperbarui.",
+                "article": article_data
+            }, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON."}, status=400)
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+    else:
+        return JsonResponse({"status": "error", "message": "Hanya menerima POST request."}, status=405)

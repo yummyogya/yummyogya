@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 import uuid
 
 class ArticleEntry(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=200, verbose_name="Title")
     content = models.TextField()
