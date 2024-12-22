@@ -44,11 +44,25 @@ def login_flutter(request):
     
 @csrf_exempt
 def register_flutter(request):
-    if request.method == 'POST':
+    if not request.body:
+        return JsonResponse({'error': 'Empty request body'}, status=400)
+    try:
         data = json.loads(request.body)
-        username = data['username']
-        password1 = data['password1']
-        password2 = data['password2']
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    
+    if request.method == 'POST':
+        username = data.get('username')
+        password1 = data.get('password1')
+        password2 = data.get('password2')
+
+        # Validate input fields
+        if not username or not isinstance(username, str):
+            return JsonResponse({'error': 'Username is required and must be a string.'}, status=400)
+        if not password1 or not isinstance(password1, str):
+            return JsonResponse({'error': 'Password1 is required and must be a string.'}, status=400)
+        if not password2 or not isinstance(password2, str):
+            return JsonResponse({'error': 'Password2 is required and must be a string.'}, status=400)
 
         # Check if the passwords match
         if password1 != password2:
@@ -70,7 +84,7 @@ def register_flutter(request):
         
         return JsonResponse({
             "username": user.username,
-            "status": 'success',
+            "status": True,
             "message": "User created successfully!"
         }, status=200)
     
