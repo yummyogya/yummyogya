@@ -153,6 +153,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:53345',  # Tambahkan origin yang sesuai dengan frontend Anda
+    'http://localhost:53345',
+    'http://127.0.0.1:8000',  
+    'http://localhost:50706', 
 ]
 

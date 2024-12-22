@@ -96,27 +96,33 @@ def view_wishlist(request):
     }
     return render(request, 'wishlist.html', context)
 
-@login_required
+@csrf_exempt
 def update_wishlist_item_notes(request, food_id):
     if request.method == 'POST':
-        food = get_object_or_404(Makanan, id=food_id)
-        wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-        
-        wishlist_item, created = WishlistItem.objects.get_or_create(
-            wishlist=wishlist, 
-            food=food
-        )
-        
-        form = WishlistItemNotesForm(request.POST, instance=wishlist_item)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Notes updated successfully.')
-            return redirect('wishlist:view_wishlist')
-        else:
-            messages.error(request, 'Error updating notes.')
-            return redirect('wishlist:view_wishlist')
-    
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            notes = data.get('notes', '')
+
+            user = User.objects.filter(username=username).first()
+            if not user:
+                return JsonResponse({'error': 'User not found'}, status=404)
+
+            food = get_object_or_404(Makanan, id=food_id)
+            wishlist, created = Wishlist.objects.get_or_create(user=user)
+
+            wishlist_item, created = WishlistItem.objects.get_or_create(
+                wishlist=wishlist, 
+                food=food
+            )
+
+            wishlist_item.notes = notes
+            wishlist_item.save()
+            return JsonResponse({'message': 'Notes updated successfully'}, status=200)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def get_wishlist_json(request):
     username = request.GET.get('username') 
